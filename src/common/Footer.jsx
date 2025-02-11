@@ -1,5 +1,7 @@
 // import React from 'react'
 
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   return (
     <div>
@@ -38,7 +40,7 @@ const Footer = () => {
           <a href="#">Cookies</a>
         </div>
         <div className="footer-links1">
-          <a href="#">Jobs</a>
+          <Link to="#">Jobs</Link>
           <a href="#">Designers</a>
           <a href="#">Freelancers</a>
           <a href="#">Tags</a>

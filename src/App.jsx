@@ -1,20 +1,8 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./common/Navbar";
-import Banner from "./common/Banner"
-import Footer from "./common/Footer"
-function Dashboard(){
-  return(
-    <>
-    <Navbar/>
-    <Banner/>
-    <Footer/>
-    </>
-  )
-}
+import Dashboard from "./pages/dashboard/Dashboard";
 
 export default function App() {
-
   return (
     <>
       <Routes>
@@ -23,4 +11,3 @@ export default function App() {
     </>
   );
 }
-

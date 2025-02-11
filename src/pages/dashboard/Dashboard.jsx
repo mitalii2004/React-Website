@@ -6,11 +6,13 @@ import Footer from "../../common/Footer"
 
 const Dashboard = () => {
   return (
+    <>
     <div>
         <Navbar/>
         <Banner/>
         <Footer/>
-    </div>
+        </div>
+    </>
   )
 }
 
