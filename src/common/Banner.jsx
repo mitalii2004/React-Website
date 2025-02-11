@@ -25,7 +25,10 @@ const Banner = () => {
             className="search-bar"
             placeholder="What are you looking for?"
           />
-          <button className="search-button">Search</button>
+          <button className="search-button">
+            <i className="fas fa-search"></i>
+            Search
+          </button>
         </div>
         <br />
         <br />

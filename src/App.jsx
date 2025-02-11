@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./common/Navbar";
 import Banner from "./common/Banner"
 import Footer from "./common/Footer"
-
 function Dashboard(){
   return(
     <>

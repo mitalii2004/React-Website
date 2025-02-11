@@ -1,5 +1,5 @@
 // import React from 'react'
-import "/Style.css"
+import "/Style.css";
 
 const Navbar = () => {
   return (
@@ -24,11 +24,13 @@ const Navbar = () => {
             </li>
           </ul>
           <div className="auth-buttons">
-            <div className="SignUpButton">
-              <h3>Sign Up</h3>
+            <div className="signup-button">
+              <h3>
+                <a href="#">Sign Up</a>
+              </h3>
             </div>
-            <div className="LoginButton">
-              <h3>Login</h3>
+            <div className="login-button">
+              <button><a href="#">Login</a></button>
             </div>
           </div>
         </div>
