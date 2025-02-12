@@ -1,41 +1,67 @@
-// import React from 'react'
-import "/Style.css";
+// // import React from 'react'
+
+import { Link } from "react-router-dom";
+// import './index.css'
 
 const Navbar = () => {
   return (
-    <div>
-      <nav className="navbar">
-        <div className="navdiv">
-          <div className="logo">
-            <a href="#">Dribbble</a>
-          </div>
-          <ul className="d-flex align-items-right">
-            <li>
-              <a href="#">Explore</a>
+    <nav className="navbar navbar-expand-lg navbar-light bg-white">
+      <div className="container">
+        {/* Logo */}
+        <Link className="navbar-brand fw-bold" to="#">
+          Dribbble
+        </Link>
+
+        {/* Toggle Button for Mobile */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        {/* Navbar Links */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav me-auto">
+            <li className="nav-item">
+              <Link className="nav-link" to="#">
+                Explore
+              </Link>
             </li>
-            <li>
-              <a href="#">Hire a designer</a>
+            <li className="nav-item">
+              <Link className="nav-link" to="#">
+                Hire a Designer
+              </Link>
             </li>
-            <li>
-              <a href="#">Find Jobs</a>
+            <li className="nav-item">
+              <Link className="nav-link" to="#">
+                Find Jobs
+              </Link>
             </li>
-            <li>
-              <a href="#">Blog</a>
+            <li className="nav-item">
+              <Link className="nav-link" to="#">
+                Blog
+              </Link>
             </li>
           </ul>
-          <div className="auth-buttons">
-            <div className="signup-button">
-              <h3>
-                <a href="#">Sign Up</a>
-              </h3>
-            </div>
-            <div className="login-button">
-              <button><a href="#">Login</a></button>
-            </div>
+
+          {/* Auth Buttons */}
+          <div className="d-flex gap-2">
+            <Link to="#" className="btn btn fw-bold">
+              Sign Up
+            </Link>
+            <Link to="#" className="btn btn text-white bg-dark">
+              Login
+            </Link>
           </div>
         </div>
-      </nav>
-    </div>
+      </div>
+    </nav>
   );
 };
 

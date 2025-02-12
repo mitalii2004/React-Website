@@ -1,19 +1,21 @@
 // import React from 'react'
 
-import Banner from "../../common/Banner"
-import Navbar from "../../common/Navbar"
-import Footer from "../../common/Footer"
+import Navbar from "../../common/Navbar";
+import Banner from "../../common/Banner";
+import Card from "../../components/cards/Card";
+import Footer from "../../common/Footer";
 
 const Dashboard = () => {
   return (
     <>
-    <div>
-        <Navbar/>
-        <Banner/>
-        <Footer/>
-        </div>
+      <div>
+        <Navbar />
+        <Banner />
+        <Card/>
+        <Footer />
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

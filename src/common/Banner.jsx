@@ -1,62 +1,71 @@
 // import React from 'react'
 import "/Style.css";
+import { Link } from "react-router-dom";
 
 const Banner = () => {
   return (
-    <div>
-      <section id="hero" className="d-flex align-items-center">
-        <div className="container text-center">
-          <h1>
-            <center>
-              Discover the world’s
-              <br /> top designers
-            </center>
-          </h1>
-        </div>
-        <h3>
-          <center>
-            Explore work from the most talented and accomplished designers
-            <br /> ready to take on your next project
-          </center>
+    <section
+      id="hero"
+      className="d-flex align-items-center text-center py-5 bg-white"
+    >
+      <div className="container">
+        <h1 className="fw-bold">
+          Discover the worlds
+          <br /> top designers
+        </h1>
+        <h3 className="mt-3">
+          Explore work from the most talented and accomplished designers
+          <br /> ready to take on your next project
         </h3>
-        <div className="search-container">
+        <div className="input-group mt-4 w-50 mx-auto">
           <input
             type="text"
-            className="search-bar"
+            className="form-control"
             placeholder="What are you looking for?"
           />
           <button className="search-button">
-            <i className="fas fa-search"></i>
-            Search
+            <i className="fas fa-search"></i> Search
           </button>
         </div>
-        <br />
-        <br />
-        <ul className="right">
-          <li>
-            <a href="#">Trending Searches</a>
+        <ul className="list-inline mt-4">
+          <li className="list-inline-item me-3">
+            <Link className="text-decoration-none text-black" to="#">
+              Trending Searches
+            </Link>
           </li>
-          <li>
-            <a href="#">loading page</a>
+          <li className="list-inline-item me-3">
+            <Link className="text-decoration-none text-black" to="#">
+              loading page
+            </Link>
           </li>
-          <li>
-            <a href="#">e-commerce</a>
+          <li className="list-inline-item me-3">
+            <Link className="text-decoration-none text-black" to="#">
+              e-commerce
+            </Link>
           </li>
-          <li>
-            <a href="#">mobile app</a>
+          <li className="list-inline-item me-3">
+            <Link className="text-decoration-none text-black" to="#">
+              mobile app
+            </Link>
           </li>
-          <li>
-            <a href="#">logo design</a>
+          <li className="list-inline-item me-3">
+            <Link className="text-decoration-none text-black" to="#">
+              logo design
+            </Link>
           </li>
-          <li>
-            <a href="#">dashboard</a>
+          <li className="list-inline-item me-3">
+            <Link className="text-decoration-none text-black" to="#">
+              dashboard
+            </Link>
           </li>
-          <li>
-            <a href="#">icons</a>
+          <li className="list-inline-item">
+            <Link className="text-decoration-none text-black" to="#">
+              icons
+            </Link>
           </li>
         </ul>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 

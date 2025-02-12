@@ -1,5 +1,11 @@
-/*Navbar Section*/
-.navbar {
+.search-button{
+  background: #ff4081;
+  border: none;
+  color: white;
+  border-radius: 20px;
+}
+/* Navbar Section*/
+/*.navbar {
   background: white;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   padding-right: 20px;
@@ -52,10 +58,10 @@ li a {
   text-decoration: none;
   color: inherit;
   display: inline-block;
-}
+} */
 
 /*Banner section*/
-section {
+/* section {
   padding: 60px 0;
   overflow: hidden;
   color: white;
@@ -102,10 +108,10 @@ h1 {
 
 :right.li {
   text-align: center;
-}
+} */
 
 /*Footer Section*/
-footer {
+/* footer {
   background: #fff;
   padding: 20px 40px;
   font-family: Arial, sans-serif;
@@ -215,8 +221,8 @@ footer {
   cursor: pointer;
   border-radius: 20px;
   transition: background 0.3s ease;
-}
+} */
 
-.login-button button:hover {
+/* .login-button button:hover {
   background-color: #333;
-}
+} */
