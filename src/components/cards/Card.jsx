@@ -1,292 +1,60 @@
 import { useState } from "react";
 import { FaHeart, FaEye } from "react-icons/fa";
 
+const cardsData = [
+  { id: 1, type: "video", src: "1st.mp4", text: "Ramotion", views: "10.7k", likes: 127 },
+  { id: 2, type: "image", src: "2nd.webp", text: "Last updated 30 mins ago", views: "5.4k", likes: 89 },
+  { id: 3, type: "image", src: "3rd.webp", text: "Last updated 1 hour ago", views: "7.2k", likes: 112 },
+  { id: 4, type: "image", src: "4th.webp", text: "Recently updated", views: "8.3k", likes: 98 },
+  { id: 5, type: "image", src: "5th.webp", text: "Trending now", views: "12.1k", likes: 145 },
+  // { id: 6, type: "video", src: "6th.mp4", text: "Creative Design", views: "15.2k", likes: 210 },
+  { id: 7, type: "image", src: "7th.webp", text: "Just added", views: "6.8k", likes: 76 },
+  // { id: 8, type: "video", src: "8th.mp4", text: "New Release", views: "9.4k", likes: 134 },
+  { id: 9, type: "image", src: "9th.webp", text: "Popular this week", views: "11.6k", likes: 198 },
+  // { id: 10, type: "video", src: "10th.mp4", text: "Top Rated", views: "14.5k", likes: 256 },
+  { id: 11, type: "image", src: "11th.webp", text: "Editor's Pick", views: "13.7k", likes: 178 },
+  { id: 12, type: "image", src: "12th.webp", text: "User Favorite", views: "16.2k", likes: 312 }
+];
+
 const Card = () => {
-  const [liked, setLiked] = useState(false);
+  const [likedItems, setLikedItems] = useState({});
+
+  const toggleLike = (id) => {
+    setLikedItems((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   return (
     <div className="container">
-      {/* First Row - 4 Cards */}
       <div className="row row-cols-1 row-cols-md-4 g-4">
-        {/* Card 1 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <video
-              src="1st.mp4"
-              className="w-16 h-16 object-cover rounded"
-              controls
-            />
-            <div className="card-footer bg-light">
-              <div className="text-muted">Last updated 3 mins ago</div>
-            </div>
-          </div>
-        </div>
+        {cardsData.map(({ id, type, src, text, views, likes }) => (
+          <div key={id} className="col">
+            <div className="card w-20 h-20 shadow-lg border-0 rounded flex flex-col items-center justify-center">
+              {type === "video" ? (
+                <video src={src} className="w-16 h-16 object-cover rounded" controls />
+              ) : (
+                <img src={src} className="w-16 h-16 object-contain" alt={`Card ${id}`} />
+              )}
 
-        {/* Card 2 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="2nd.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 2"
-            />
+              <div className="card-footer bg-light w-100 d-flex justify-content-between align-items-center p-2">
+                <div className="text-muted">{text}</div>
 
-            <div className="card-footer bg-light d-flex justify-content-between align-items-center w-100 p-2">
-              <div className="text-muted">Last updated 30 mins ago</div>
-
-              <div className="d-flex gap-2">
-                {/* Like Button */}
-                <FaHeart
-                  className={`cursor-pointer ${
-                    liked ? "text-danger" : "text-secondary"
-                  }`}
-                  onClick={() => setLiked(!liked)}
-                  size={20}
-                />
-
-                {/* View Icon */}
-                <FaEye className="text-primary" size={20} />
+                <div className="d-flex gap-2">
+                  <FaHeart
+                    className={`cursor-pointer ${likedItems[id] ? "text-danger" : "text-secondary"}`}
+                    onClick={() => toggleLike(id)}
+                    size={20}
+                  />
+                  {likes}
+                  <FaEye className="text-primary" size={20} />
+                  {views}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Card 3 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="3rd.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 3"
-            />
-
-            <div className="card-footer bg-light d-flex justify-content-between align-items-center w-100 p-2">
-              <div className="text-muted">Last updated 30 mins ago</div>
-
-              <div className="d-flex gap-2">
-                {/* Like Button */}
-                <FaHeart
-                  className={`cursor-pointer ${
-                    liked ? "text-danger" : "text-secondary"
-                  }`}
-                  onClick={() => setLiked(!liked)}
-                  size={20}
-                />
-
-                {/* View Icon */}
-                <FaEye className="text-primary" size={20} />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 4 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="12th.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 12"
-            />
-
-            <div className="card-footer bg-light d-flex justify-content-between align-items-center w-100 p-2">
-              <div className="text-muted">Last updated 30 mins ago</div>
-
-              <div className="d-flex gap-2">
-                {/* Like Button */}
-                <FaHeart
-                  className={`cursor-pointer ${
-                    liked ? "text-danger" : "text-secondary"
-                  }`}
-                  onClick={() => setLiked(!liked)}
-                  size={20}
-                />
-
-                {/* View Icon */}
-                <FaEye className="text-primary" size={20} />
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      {/* Second Row - 4 More Cards */}
-      <div className="row row-cols-1 row-cols-md-4 g-4 mt-3">
-        {/* Card 5 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="5th.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 5"
-            />
-            <div className="card-footer bg-light">
-              <div className="text-muted">Last updated 20 mins ago</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 6 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="6th.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 6"
-            />
-            <div className="card-footer bg-light">
-              <div className="text-muted">Last updated 25 mins ago</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 7 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="7th.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 7"
-            />
-            <div className="card-footer bg-light">
-              <div className="text-muted">Last updated 30 mins ago</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 8 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="8th.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 8"
-            />
-            <div className="card-footer bg-light">
-              <div className="text-muted">Last updated 35 mins ago</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Third Row - 4 More Cards */}
-      <div className="row row-cols-1 row-cols-md-4 g-4 mt-3">
-        {/* Card 9 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="9th.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 9"
-            />
-
-            <div className="card-footer bg-light d-flex justify-content-between align-items-center w-100 p-2">
-              <div className="text-muted">Last updated 30 mins ago</div>
-
-              <div className="d-flex gap-2">
-                {/* Like Button */}
-                <FaHeart
-                  className={`cursor-pointer ${
-                    liked ? "text-danger" : "text-secondary"
-                  }`}
-                  onClick={() => setLiked(!liked)}
-                  size={20}
-                />
-
-                {/* View Icon */}
-                <FaEye className="text-primary" size={20} />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 10 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="10th.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 10"
-            />
-
-            <div className="card-footer bg-light d-flex justify-content-between align-items-center w-100 p-2">
-              <div className="text-muted">Last updated 30 mins ago</div>
-
-              <div className="d-flex gap-2">
-                {/* Like Button */}
-                <FaHeart
-                  className={`cursor-pointer ${
-                    liked ? "text-danger" : "text-secondary"
-                  }`}
-                  onClick={() => setLiked(!liked)}
-                  size={20}
-                />
-
-                {/* View Icon */}
-                <FaEye className="text-primary" size={20} />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 11 */}
-
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="11th.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 11"
-            />
-
-            <div className="card-footer bg-light d-flex justify-content-between align-items-center w-100 p-2">
-              <div className="text-muted">Last updated 30 mins ago</div>
-
-              <div className="d-flex gap-2">
-                {/* Like Button */}
-                <FaHeart
-                  className={`cursor-pointer ${
-                    liked ? "text-danger" : "text-secondary"
-                  }`}
-                  onClick={() => setLiked(!liked)}
-                  size={20}
-                />
-
-                {/* View Icon */}
-                <FaEye className="text-primary" size={20} />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 12 */}
-        <div className="col">
-          <div className="card w-20 h-20 shadow-lg border-0 rounded flex items-center justify-center">
-            <img
-              src="12th.webp"
-              className="card-img-top w-16 h-16 object-contain"
-              alt="Card 12"
-            />
-
-            <div className="card-footer bg-light d-flex justify-content-between align-items-center w-100 p-2">
-              <div className="text-muted">Last updated 30 mins ago</div>
-
-              <div className="d-flex gap-2">
-                {/* Like Button */}
-                <FaHeart
-                  className={`cursor-pointer ${
-                    liked ? "text-danger" : "text-secondary"
-                  }`}
-                  onClick={() => setLiked(!liked)}
-                  size={20}
-                />
-
-                {/* View Icon */}
-                <FaEye className="text-primary" size={20} />
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
