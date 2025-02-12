@@ -7,11 +7,11 @@ const cardsData = [
   { id: 3, type: "image", src: "3rd.webp", text: "Last updated 1 hour ago", views: "7.2k", likes: 112 },
   { id: 4, type: "image", src: "4th.webp", text: "Recently updated", views: "8.3k", likes: 98 },
   { id: 5, type: "image", src: "5th.webp", text: "Trending now", views: "12.1k", likes: 145 },
-  // { id: 6, type: "video", src: "6th.mp4", text: "Creative Design", views: "15.2k", likes: 210 },
+  { id: 6, type: "image", src: "6th.webp", text: "Creative Design", views: "15.2k", likes: 210 },
   { id: 7, type: "image", src: "7th.webp", text: "Just added", views: "6.8k", likes: 76 },
-  // { id: 8, type: "video", src: "8th.mp4", text: "New Release", views: "9.4k", likes: 134 },
+  { id: 8, type: "image", src: "8th.webp", text: "New Release", views: "9.4k", likes: 134 },
   { id: 9, type: "image", src: "9th.webp", text: "Popular this week", views: "11.6k", likes: 198 },
-  // { id: 10, type: "video", src: "10th.mp4", text: "Top Rated", views: "14.5k", likes: 256 },
+  { id: 10, type: "image", src: "10th.webp", text: "Top Rated", views: "14.5k", likes: 256 },
   { id: 11, type: "image", src: "11th.webp", text: "Editor's Pick", views: "13.7k", likes: 178 },
   { id: 12, type: "image", src: "12th.webp", text: "User Favorite", views: "16.2k", likes: 312 }
 ];
