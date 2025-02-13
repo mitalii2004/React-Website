@@ -99,6 +99,14 @@ const cardsData = [
     views: "16.2k",
     likes: 312,
   },
+  {
+    id: 13,
+    type: "video",
+    src: "13th.mp4",
+    text: "Ramotion",
+    views: "10.7k",
+    likes: 127,
+  },
 ];
 
 const Card = () => {
