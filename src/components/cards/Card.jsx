@@ -150,8 +150,10 @@ const Card = () => {
             </div>
           </div>
         ))}
+        
       </div>
     </div>
+    
   );
 };
 
