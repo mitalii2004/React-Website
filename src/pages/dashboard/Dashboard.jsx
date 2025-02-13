@@ -6,41 +6,33 @@ import Card from "../../components/cards/Card";
 import Footer from "../../common/Footer";
 
 const categories = [
-  [
-    // { name: "Mobile", image: "/1st.webp" },
-    { name: "Print", image: "/2nd.webp" },
-    { name: "Typography", image: "/3rd.webp" },
-    { name: "Product Design", image: "/4th.webp" },
-  ],
-  [
-    // { name: "Web Design", image: "/1st.webp" },
-    { name: "Illustration", image: "/2nd.webp" },
-    { name: "Branding", image: "/3rd.webp" },
-    { name: "Animation", image: "/4th.webp" },
-  ],
+  { name: "Print", image: "/2nd.webp" },
+  { name: "Typography", image: "/3rd.webp" },
+  { name: "Product Design", image: "/4th.webp" },
+  { name: "Animation", image: "/10th.webp" },
+  { name: "Illustration", image: "/5th.webp" },
+  { name: "Branding", image: "/6th.webp" },
+  { name: "Web Design", image: "/8th.webp" },
 ];
 
 const Dashboard = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const totalSlides = Math.ceil(categories.length / 4); // 4 items per slide
 
-  // Auto-slide every 3 seconds (moving from right to left)
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
     }, 3000);
-
-    return () => clearInterval(interval); // Cleanup interval
-  }, []);
+    return () => clearInterval(interval);
+  });
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % categories.length);
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
   };
 
   const prevSlide = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + categories.length) % categories.length
-    );
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
   return (
@@ -148,16 +140,23 @@ const Dashboard = () => {
       <div className="container mt-4">
         <h3 className="text-center mb-3">Featured Categories</h3>
 
-        <div className="carousel-container">
+        <div className="position-relative overflow-hidden">
           <div
-            className="carousel-track"
-            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            className="d-flex transition"
+            style={{
+              transform: `translateX(-${currentSlide * 100}%)`,
+              width: `${totalSlides * 100}%`,
+            }}
           >
-            {categories.map((group, index) => (
-              <div key={index} className="carousel-slide">
-                <div className="row">
-                  {group.map((category, idx) => (
-                    <div key={idx} className="col-md-3 text-center">
+            {Array.from({ length: totalSlides }).map((_, slideIndex) => (
+              <div key={slideIndex} className="d-flex gap-3 w-100">
+                {categories
+                  .slice(slideIndex * 4, slideIndex * 4 + 4)
+                  .map((category, idx) => (
+                    <div
+                      key={idx}
+                      className="col-md-3 text-center flex-shrink-0"
+                    >
                       <img
                         src={category.image}
                         className="img-fluid rounded"
@@ -166,16 +165,21 @@ const Dashboard = () => {
                       <p className="fw-bold mt-2">{category.name}</p>
                     </div>
                   ))}
-                </div>
               </div>
             ))}
           </div>
 
           {/* Carousel Controls */}
-          <button className="carousel-btn left" onClick={prevSlide}>
+          <button
+            className="btn btn-dark position-absolute start-0 top-50 translate-middle-y"
+            onClick={prevSlide}
+          >
             ❮
           </button>
-          <button className="carousel-btn right" onClick={nextSlide}>
+          <button
+            className="btn btn-dark position-absolute end-0 top-50 translate-middle-y"
+            onClick={nextSlide}
+          >
             ❯
           </button>
         </div>
