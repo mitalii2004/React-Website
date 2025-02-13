@@ -9,7 +9,7 @@ const Banner = () => {
       className="d-flex align-items-center text-center py-5 bg-white"
     >
       <div className="container">
-        <h1 className="display-4 fw-bold ">
+        <h1 className="display-1  ">
           Discover the worlds
           <br /> top designers
         </h1>
