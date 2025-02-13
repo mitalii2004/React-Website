@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../common/Navbar";
 import Banner from "../../common/Banner";
@@ -13,36 +13,51 @@ const categories = [
   { name: "Illustration", image: "/5th.webp" },
   { name: "Branding", image: "/6th.webp" },
   { name: "Web Design", image: "/8th.webp" },
+  { name: "Product Design", image: "/4th.webp" },
 ];
 
+// Duplicate items for infinite scrolling
+const getInfiniteItems = (arr) => [...arr, ...arr];
+
 const Dashboard = () => {
-  const [showFilters, setShowFilters] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = Math.ceil(categories.length / 4); // 4 items per slide
+  const [pause, setPause] = useState(false);
+  const [manualControl, setManualControl] = useState(false);
+  const trackRef = useRef(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 3000);
-    return () => clearInterval(interval);
-  });
+    if (trackRef.current) {
+      if (pause || manualControl) {
+        trackRef.current.style.animationPlayState = "paused";
+      } else {
+        trackRef.current.style.animationPlayState = "running";
+      }
+    }
+  }, [pause, manualControl]);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  const scrollLeft = () => {
+    if (trackRef.current) {
+      setManualControl(true);
+      trackRef.current.scrollLeft -= 250;
+      setTimeout(() => setManualControl(false), 5000);
+    }
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  const scrollRight = () => {
+    if (trackRef.current) {
+      setManualControl(true);
+      trackRef.current.scrollLeft += 250;
+      setTimeout(() => setManualControl(false), 5000);
+    }
   };
 
   return (
     <>
       <Navbar />
       <Banner />
+
+      {/* Navigation Bar */}
       <div className="container mt-3">
-        {/* Top Navigation Bar */}
         <div className="d-flex align-items-center justify-content-between p-2">
-          {/* Popular Dropdown */}
           <div>
             <select className="form-select d-inline w-auto">
               <option defaultValue="Popular">Popular</option>
@@ -50,7 +65,6 @@ const Dashboard = () => {
             </select>
           </div>
 
-          {/* Navigation Links */}
           <nav className="nav">
             <Link
               className="btn btn-light text-black border-black px-3"
@@ -84,102 +98,42 @@ const Dashboard = () => {
             </Link>
           </nav>
 
-          {/* Filters Button */}
-          <button
-            className="btn btn-outline-secondary no-hover"
-            onClick={() => setShowFilters(!showFilters)}
-          >
+          <button className="btn btn-outline-secondary no-hover">
             <i className="bi bi-funnel"></i> Filters
           </button>
         </div>
-
-        {/* Filter Options */}
-        {showFilters && (
-          <div className="filter-container d-flex gap-3 p-3 mt-2 bg-light rounded shadow-sm">
-            {/* Tags Filter */}
-            <div className="filter-option w-100">
-              <label className="form-label fw-bold">Tags</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search tags..."
-              />
-            </div>
-
-            {/* Color Filter */}
-            <div className="filter-option w-100">
-              <label className="form-label fw-bold">Color</label>
-              <div className="position-relative">
-                <input
-                  type="color"
-                  className="form-control form-control-color w-100"
-                  style={{ height: "38px", padding: "5px" }}
-                />
-              </div>
-            </div>
-
-            {/* Timeframe Filter */}
-            <div className="filter-option w-100">
-              <label className="form-label fw-bold">Timeframe</label>
-              <select className="form-select fs-6">
-                <option>Now</option>
-                <option>This Past Week</option>
-                <option>This Past Month</option>
-                <option>This Past Year</option>
-                <option>All Time</option>
-              </select>
-            </div>
-          </div>
-        )}
       </div>
 
-      <br />
+      {/* Cards Section */}
       <Card />
 
-      {/* Custom Carousel (Sliding from Right to Left) */}
+      {/* Infinite Scrolling Carousel */}
       <div className="container mt-4">
         <h3 className="text-center mb-3">Featured Categories</h3>
 
-        <div className="position-relative overflow-hidden">
-          <div
-            className="d-flex transition"
-            style={{
-              transform: `translateX(-${currentSlide * 100}%)`,
-              width: `${totalSlides * 100}%`,
-            }}
-          >
-            {Array.from({ length: totalSlides }).map((_, slideIndex) => (
-              <div key={slideIndex} className="d-flex gap-3 w-100">
-                {categories
-                  .slice(slideIndex * 4, slideIndex * 4 + 4)
-                  .map((category, idx) => (
-                    <div
-                      key={idx}
-                      className="col-md-3 text-center flex-shrink-0"
-                    >
-                      <img
-                        src={category.image}
-                        className="img-fluid rounded"
-                        alt={category.name}
-                      />
-                      <p className="fw-bold mt-2">{category.name}</p>
-                    </div>
-                  ))}
+        <div
+          className="carousel-container"
+          onMouseEnter={() => setPause(true)}
+          onMouseLeave={() => setPause(false)}
+        >
+          <button className="carousel-btn left" onClick={scrollLeft}>
+            ❮
+          </button>
+
+          <div className="carousel-track" ref={trackRef}>
+            {getInfiniteItems(categories).map((category, idx) => (
+              <div key={idx} className="carousel-slide">
+                <img
+                  src={category.image}
+                  className="img-fluid rounded"
+                  alt={category.name}
+                />
+                <p className="fw-bold mt-2">{category.name}</p>
               </div>
             ))}
           </div>
 
-          {/* Carousel Controls */}
-          <button
-            className="btn btn-dark position-absolute start-0 top-50 translate-middle-y"
-            onClick={prevSlide}
-          >
-            ❮
-          </button>
-          <button
-            className="btn btn-dark position-absolute end-0 top-50 translate-middle-y"
-            onClick={nextSlide}
-          >
+          <button className="carousel-btn right" onClick={scrollRight}>
             ❯
           </button>
         </div>
@@ -187,22 +141,37 @@ const Dashboard = () => {
 
       <Footer />
 
-      {/* Styles for Custom Carousel */}
+      {/* Styles */}
       <style>
         {`
           .carousel-container {
             position: relative;
             overflow: hidden;
             width: 100%;
+            white-space: nowrap;
+            padding: 10px 0;
           }
+
           .carousel-track {
             display: flex;
-            transition: transform 1s ease-in-out;
+            gap: 20px;
+            width: max-content;
+            animation: scroll 10s linear infinite;
+            overflow-x: auto;
+            scroll-behavior: smooth;
           }
+
           .carousel-slide {
-            min-width: 100%;
-            box-sizing: border-box;
+            flex: 0 0 auto;
+            width: 200px;
+            text-align: center;
           }
+
+          @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+
           .carousel-btn {
             position: absolute;
             top: 50%;
@@ -214,13 +183,17 @@ const Dashboard = () => {
             cursor: pointer;
             font-size: 20px;
             border-radius: 50%;
+            z-index: 10;
           }
+
           .carousel-btn.left {
             left: 10px;
           }
+
           .carousel-btn.right {
             right: 10px;
           }
+
           .carousel-btn:hover {
             background: rgba(0, 0, 0, 0.8);
           }
