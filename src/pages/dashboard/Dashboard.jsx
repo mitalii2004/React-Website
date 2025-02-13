@@ -20,6 +20,8 @@ const categories = [
 const getInfiniteItems = (arr) => [...arr, ...arr];
 
 const Dashboard = () => {
+  const [showFilters, setShowFilters] = useState({});
+
   const [pause, setPause] = useState(false);
   const [manualControl, setManualControl] = useState(false);
   const trackRef = useRef(null);
@@ -56,7 +58,6 @@ const Dashboard = () => {
       <Banner />
 
       {/* Navigation Bar */}
-      <div className="container mt-3">
         <div className="d-flex align-items-center justify-content-between p-2">
           <div>
             <select className="form-select d-inline w-auto">
@@ -97,12 +98,51 @@ const Dashboard = () => {
               Web Design
             </Link>
           </nav>
-
-          <button className="btn btn-outline-secondary no-hover">
-            <i className="bi bi-funnel"></i> Filters
-          </button>
-        </div>
+        <button
+          className="btn btn-outline-secondary"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          <i className="bi bi-funnel"></i> Filters
+        </button>
       </div>
+
+      {/* Filter Options (Side by Side with Equal Size) */}
+      {showFilters && (
+        <div className="filter-container d-flex gap-3 p-3 mt-2 bg-light rounded shadow-sm">
+          {/* Tags Filter */}
+          <div className="filter-option w-100">
+            <label className="form-label fw-bold">Tags</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search tags..."
+            />
+          </div>
+
+          {/* Color Filter */}
+          <div className="filter-option w-100">
+            <label className="form-label fw-bold">Color</label>
+            <div className="position-relative">
+              <input
+                type="color"
+                className="form-control form-control-color w-100"
+                style={{ height: "38px", padding: "5px" }} // Match height & padding with other inputs
+              />
+            </div>
+          </div>
+
+          {/* Timeframe Filter */}
+          <div className="filter-option w-100">
+            <label className="form-label fw-bold">Timeframe</label>
+            <select className="form-select">
+              <option>Now</option>
+              <option>Past Week</option>
+              <option>Past Month</option>
+              <option>Past Year</option>
+            </select>
+          </div>
+        </div>
+      )}
 
       {/* Cards Section */}
       <Card />
