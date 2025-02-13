@@ -36,16 +36,16 @@ const Dashboard = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
-  useEffect(() => {
     if (trackRef.current) {
       trackRef.current.style.animationPlayState =
         pause || manualControl ? "paused" : "running";
     }
-  }, [pause, manualControl]);
 
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [pause, manualControl]);
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -155,9 +155,10 @@ const Dashboard = () => {
             <label className="form-label fw-bold">Timeframe</label>
             <select className="form-select">
               <option>Now</option>
-              <option>Past Week</option>
-              <option>Past Month</option>
-              <option>Past Year</option>
+              <option>This Past Week</option>
+              <option>This Past Month</option>
+              <option>This Past Year</option>
+              <option>All Time</option>
             </select>
           </div>
         </div>
@@ -204,7 +205,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
 
       <Footer />
 
