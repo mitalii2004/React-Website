@@ -109,11 +109,10 @@ const Dashboard = () => {
         <div className="filter-container d-flex gap-3 p-3 mt-2 bg-white rounded shadow-sm">
           {/* Tags Filter */}
           <div className="filter-option w-100">
-            <label className="form-label fw-bold">Tags</label>
+            <label className="form-label fw-bold">
+              Tags <i className="fas fa-search"></i>
+            </label>
             <div className="input-group border-0">
-              <span className="input-group-text">
-                <i className="fas fa-search"></i>
-              </span>
               <input
                 type="text"
                 className="form-control"
@@ -165,6 +164,11 @@ const Dashboard = () => {
       )}
       <br />
       <br />
+      {showScrollButton && (
+        <button className="scroll-to-top" onClick={scrollToTop}>
+          ↑
+        </button>
+      )}
       {/* Cards Section */}
       <Card />
       <br />
@@ -201,12 +205,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Scroll to Top Button */}
-      {showScrollButton && (
-        <button className="scroll-to-top" onClick={scrollToTop}>
-          ↑
-        </button>
-      )}
 
       <Footer />
 
