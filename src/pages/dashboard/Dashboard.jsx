@@ -38,7 +38,9 @@ const Dashboard = () => {
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + categories.length) % categories.length);
+    setCurrentSlide(
+      (prev) => (prev - 1 + categories.length) % categories.length
+    );
   };
 
   return (
@@ -58,7 +60,10 @@ const Dashboard = () => {
 
           {/* Navigation Links */}
           <nav className="nav">
-            <Link className="btn btn-light text-black border-black px-3" to="/discover">
+            <Link
+              className="btn btn-light text-black border-black px-3"
+              to="/discover"
+            >
               Discover
             </Link>
             <Link className="nav-link text-black" to="/animation">
@@ -102,7 +107,11 @@ const Dashboard = () => {
             {/* Tags Filter */}
             <div className="filter-option w-100">
               <label className="form-label fw-bold">Tags</label>
-              <input type="text" className="form-control" placeholder="Search tags..." />
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search tags..."
+              />
             </div>
 
             {/* Color Filter */}
@@ -149,7 +158,11 @@ const Dashboard = () => {
                 <div className="row">
                   {group.map((category, idx) => (
                     <div key={idx} className="col-md-3 text-center">
-                      <img src={category.image} className="img-fluid rounded" alt={category.name} />
+                      <img
+                        src={category.image}
+                        className="img-fluid rounded"
+                        alt={category.name}
+                      />
                       <p className="fw-bold mt-2">{category.name}</p>
                     </div>
                   ))}
