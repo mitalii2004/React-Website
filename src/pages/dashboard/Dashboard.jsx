@@ -58,7 +58,7 @@ const Dashboard = () => {
       {/* Navigation Bar */}
       <div className="d-flex align-items-center justify-content-between p-2">
         <div>
-          <select className="form-select d-inline w-auto">
+          <select className="form-select d-inline w-auto text-black">
             <option defaultValue="Popular">Popular</option>
             <option>New & Noteworthy</option>
           </select>
@@ -66,7 +66,7 @@ const Dashboard = () => {
 
         <nav className="nav">
           <Link
-            className="btn btn-light text-black border-black px-3"
+            className="btn btn-light text-black border-black px-3 discover-btn"
             to="/discover"
           >
             Discover
@@ -97,10 +97,10 @@ const Dashboard = () => {
           </Link>
         </nav>
         <button
-          className="btn btn-outline-secondary custom-filter-btn"
+          className="btn btn-outline-secondary custom-filter-btn text-black"
           onClick={() => setShowFilters((prev) => !prev)}
         >
-          <i className="fa-solid fa-sliders"></i> Filters
+          <i className="fa-solid fa-sliders text-black"></i> Filters
         </button>
       </div>
 
@@ -213,6 +213,14 @@ const Dashboard = () => {
       {/* Styles */}
       <style>
         {`
+        .discover-btn:active,
+.discover-btn:focus {
+  pointer-events: none; /* Disables hover & click effects */
+  background-color: #f8f9fa !important; /* Keeps default Bootstrap light color */
+  color: black !important;
+  border-color: black !important;
+}
+
         .search-button{
   background: #ff4081;
   border: none;

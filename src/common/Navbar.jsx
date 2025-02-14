@@ -17,7 +17,10 @@ const Navbar = () => {
       <nav className="navbar navbar-expand-lg navbar-light bg-white">
         <div className="container">
           {/* Logo */}
-          <Link className="navbar-brand fw-bold" to="/">
+          <Link
+            className="navbar-brand dribbble-text fw-bold fst-italic"
+            to="/"
+          >
             Dribbble
           </Link>
 
@@ -44,7 +47,7 @@ const Navbar = () => {
                 onMouseLeave={handleMouseLeave}
               >
                 <button
-                  className="nav-link dropdown-toggle"
+                  className="nav-link dropdown-toggle text-black"
                   id="exploreDropdown"
                   aria-expanded={openDropdown === "explore"}
                 >
@@ -58,13 +61,13 @@ const Navbar = () => {
                 >
                   <li>
                     <Link className="dropdown-item" to="/product-design">
-                      <i className="fas fa-star me-2"></i> Popular
+                      <i className="fas fa-star me-2 text-black"></i> Popular
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/product-design">
-                      <i className="fas fa-fire me-2 text-danger"></i> New and
-                      Noteworthy
+                      <i className="fas fa-fire me-2 text-danger text-black"></i>
+                      New and Noteworthy
                     </Link>
                   </li>
                   <hr />
@@ -118,7 +121,7 @@ const Navbar = () => {
                 onMouseLeave={handleMouseLeave}
               >
                 <button
-                  className="nav-link dropdown-toggle"
+                  className="nav-link dropdown-toggle text-black"
                   id="hireDropdown"
                   aria-expanded={openDropdown === "hire"}
                 >
@@ -132,24 +135,26 @@ const Navbar = () => {
                 >
                   <li>
                     <Link className="dropdown-item" to="/browse-designers">
-                      <FaUsers className="me-2 text-primary" /> Browse Designers
+                      <FaUsers className="me-2 text-primary text-black" />{" "}
+                      Browse Designers
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/submit-brief">
-                      <FaFileAlt className="me-2 text-info" /> Submit a Project
-                      Brief
+                      <FaFileAlt className="me-2 text-info text-black" /> Submit
+                      a Project Brief
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/post-job">
-                      <FaBriefcase className="me-2 text-success" /> Post a Job
+                      <FaBriefcase className="me-2 text-success text-black" />{" "}
+                      Post a Job
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/hiring">
-                      <FaHandshake className="me-2 text-warning" /> Hiring on
-                      Dribbble
+                      <FaHandshake className="me-2 text-warning text-black" />{" "}
+                      Hiring on Dribbble
                     </Link>
                   </li>
                 </ul>
@@ -157,14 +162,14 @@ const Navbar = () => {
 
               {/* Find Jobs */}
               <li className="nav-item">
-                <Link className="nav-link" to="/find-jobs">
+                <Link className="nav-link text-black" to="/find-jobs">
                   Find Jobs
                 </Link>
               </li>
 
               {/* Blog */}
               <li className="nav-item">
-                <Link className="nav-link" to="/blog">
+                <Link className="nav-link text-black" to="/blog">
                   Blog
                 </Link>
               </li>
@@ -186,6 +191,18 @@ const Navbar = () => {
       {/* Custom Styles */}
       <style>
         {`
+        .dribbble-text {
+  font-family: "Pacifico", cursive !important;  /* Cursive font */
+  font-size: 30px !important;  /* Adjust text size */
+  color: #05000d !important; /* Dark color */
+  text-decoration: none !important;
+}
+
+.dribbble-text:hover {
+  color: #ea4c89 !important; /* Dribbble pink on hover */
+  transition: color 0.3s ease-in-out;
+}
+
           .dropdown-menu {
             display: none;
             position: absolute;

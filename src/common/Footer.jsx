@@ -7,7 +7,14 @@ const Footer = () => {
       <div className="container text-center">
         <div className="row mt-3">
           <div className="col-md-12 mb-3">
-            <h5 className="fw-bold">Dribbble</h5>
+            {/* <h5 className="fw-bold">Dribbble</h5> */}
+            <Link
+              className="navbar-brand dribbble-text fw-bold fst-italic"
+              to="/"
+            >
+              Dribbble
+            </Link>
+            <br />
             <Link className="text-dark me-3 text-decoration-none" to="#">
               For designers
             </Link>
@@ -35,8 +42,8 @@ const Footer = () => {
           </div>
         </div>
         <div className="row mt-3 align-items-center justify-content-between">
-          <div className="col-md-6 text-start">
-            <p className="mb-0 text-muted">© 2025 Dribbble</p>
+          <div className="col-md-6 text-start ">
+            <p className="mb-0 text-muted text-black">© 2025 Dribbble</p>
             <Link className="text-dark me-3 text-decoration-none" to="#">
               Terms
             </Link>
@@ -85,6 +92,22 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      <style>
+        {`
+        .dribbble-text {
+  font-family: "Pacifico", cursive !important;  /* Cursive font */
+  font-size: 30px !important;  /* Adjust text size */
+  color: #05000d !important; /* Dark color */
+  text-decoration: none !important;
+}
+
+.dribbble-text:hover {
+  color: #ea4c89 !important; /* Dribbble pink on hover */
+  transition: color 0.3s ease-in-out;
+}
+    
+`}
+      </style>
     </footer>
   );
 };
