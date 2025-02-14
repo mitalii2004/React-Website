@@ -176,9 +176,11 @@ const Dashboard = () => {
       <br />
       <br />
       <div className="d-flex justify-content-center align-items-center vh-90 mt-5">
-        <button className="px-4 py-2 rounded-pill text-white bg-dark border-none">
-          Sign Up to Continue
-        </button>
+        <Link to="/SignUp">
+          <button className="px-4 py-2 rounded-pill text-white bg-dark border-none">
+            Sign Up to Continue
+          </button>
+        </Link>
       </div>
       <br />
       <br />
@@ -211,6 +213,13 @@ const Dashboard = () => {
       {/* Styles */}
       <style>
         {`
+        .search-button{
+  background: #ff4081;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+}
           .scroll-to-top {
             position: fixed;
             bottom: 20px;

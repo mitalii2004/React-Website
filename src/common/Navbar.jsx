@@ -1,67 +1,201 @@
-// // import React from 'react'
-
+import { useState } from "react";
 import { Link } from "react-router-dom";
-// import './index.css'
 
 const Navbar = () => {
+  const [openDropdown, setOpenDropdown] = useState(null);
+
+  const handleMouseEnter = (dropdown) => {
+    setOpenDropdown(dropdown);
+  };
+
+  const handleMouseLeave = () => {
+    setOpenDropdown(null);
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white">
-      <div className="container">
-        {/* Logo */}
-        <Link className="navbar-brand fw-bold" to="#">
-          Dribbble
-        </Link>
+    <>
+      <nav className="navbar navbar-expand-lg navbar-light bg-white">
+        <div className="container">
+          {/* Logo */}
+          <Link className="navbar-brand fw-bold" to="/">
+            Dribbble
+          </Link>
 
-        {/* Toggle Button for Mobile */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+          {/* Toggle Button for Mobile */}
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
 
-        {/* Navbar Links */}
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="#">
-                Explore
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="#">
-                Hire a Designer
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="#">
-                Find Jobs
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="#">
-                Blog
-              </Link>
-            </li>
-          </ul>
+          {/* Navbar Links */}
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav me-auto align-items-center">
+              {/* Explore Dropdown */}
+              <li
+                className="nav-item dropdown"
+                onMouseEnter={() => handleMouseEnter("explore")}
+                onMouseLeave={handleMouseLeave}
+              >
+                <button
+                  className="nav-link dropdown-toggle"
+                  id="exploreDropdown"
+                  aria-expanded={openDropdown === "explore"}
+                >
+                  Explore
+                </button>
+                <ul
+                  className={`dropdown-menu ${
+                    openDropdown === "explore" ? "show" : ""
+                  }`}
+                  aria-labelledby="exploreDropdown"
+                >
+                  <li>
+                    <Link className="dropdown-item" to="/product-design">
+                      Popular
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/product-design">
+                      New and Noteworthy
+                    </Link>
+                  </li>
+                  <hr />
+                  <li>
+                    <Link className="dropdown-item" to="/product-design">
+                      Product Design
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/web-design">
+                      Web Design
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/animation">
+                      Animation
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/animation">
+                      Branding
+                    </Link>
+                  </li>{" "}
+                  <li>
+                    <Link className="dropdown-item" to="/animation">
+                      Illustration
+                    </Link>
+                  </li>{" "}
+                  <li>
+                    <Link className="dropdown-item" to="/animation">
+                      Mobile
+                    </Link>
+                  </li>{" "}
+                  <li>
+                    <Link className="dropdown-item" to="/animation">
+                      Typography
+                    </Link>
+                  </li>{" "}
+                  <li>
+                    <Link className="dropdown-item" to="/animation">
+                      Print
+                    </Link>
+                  </li>
+                </ul>
+              </li>
 
-          {/* Auth Buttons */}
-          <div className="d-flex gap-2">
-            <Link to="#" className="btn btn fw-bold">
-              Sign Up
-            </Link>
-            <Link to="#" className="btn btn text-white bg-dark">
-              Login
-            </Link>
+              {/* Hire a Designer Dropdown */}
+              <li
+                className="nav-item dropdown"
+                onMouseEnter={() => handleMouseEnter("hire")}
+                onMouseLeave={handleMouseLeave}
+              >
+                <button
+                  className="nav-link dropdown-toggle"
+                  id="hireDropdown"
+                  aria-expanded={openDropdown === "hire"}
+                >
+                  Hire a Designer
+                </button>
+                <ul
+                  className={`dropdown-menu ${
+                    openDropdown === "hire" ? "show" : ""
+                  }`}
+                  aria-labelledby="hireDropdown"
+                >
+                  <li>
+                    <Link className="dropdown-item" to="/browse-designers">
+                      Browse Designers
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/submit-brief">
+                      Submit a Project Brief
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/submit-brief">
+                      Post a Job
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/submit-brief">
+                      Hiring on Dribbble
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
+              {/* Find Jobs */}
+              <li className="nav-item">
+                <Link className="nav-link" to="/find-jobs">
+                  Find Jobs
+                </Link>
+              </li>
+
+              {/* Blog */}
+              <li className="nav-item">
+                <Link className="nav-link" to="/blog">
+                  Blog
+                </Link>
+              </li>
+            </ul>
+
+            {/* Auth Buttons */}
+            <div className="d-flex gap-2">
+              <Link to="/signup" className="btn fw-bold">
+                Sign Up
+              </Link>
+              <Link to="/login" className="btn text-white bg-dark">
+                Login
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      {/* Custom Styles */}
+      <style>
+        {`
+          .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+          }
+          .dropdown-menu.show {
+            display: block;
+          }
+        `}
+      </style>
+    </>
   );
 };
 
