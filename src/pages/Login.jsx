@@ -6,7 +6,7 @@ const Login = () => {
       {/* Left Side - Image */}
       <div className="d-none d-md-flex col-md-4 bg-dark text-white align-items-center justify-content-center">
         <img
-          src="Login.avif"
+          src="Login1.gif"
           alt="Background"
           className="img-fluid vh-100 w-100"
           style={{ objectFit: "cover" }}
@@ -57,7 +57,7 @@ const Login = () => {
 
           {/* Signup Link */}
           <p className="mt-3 text-center">
-            Don't have an account? <Link to="/Signup"><u>Sign up</u></Link>
+            Dont have an account? <Link to="/Signup"><u>Sign up</u></Link>
           </p>
         </div>
       </div>

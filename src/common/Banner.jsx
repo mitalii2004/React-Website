@@ -17,7 +17,7 @@ const Banner = () => {
           Explore work from the most talented and accomplished designers
           <br /> ready to take on your next project
         </h6>
-        <div className="input-group mt-4 w-50 mx-auto">
+        {/* <div className="input-group mt-4 w-50 mx-auto">
           <input
             type="text"
             className="form-control text-decoration-none"
@@ -26,7 +26,48 @@ const Banner = () => {
           <button className="search-button">
             <i className="fas fa-search"></i> Search
           </button>
+        </div> */}
+        <div className="input-group mt-4 w-50 mx-auto">
+          <input
+            type="text"
+            className="form-control text-decoration-none"
+            placeholder="What are you looking for?"
+          />
+
+          <div className="dropdown">
+            <button
+              className="btn btn-light dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Shots
+            </button>
+            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li>
+                <a className="dropdown-item" href="#">
+                  Shots
+                </a>
+              </li>
+              <li>
+                <a className="dropdown-item" href="#">
+                  Designs
+                </a>
+              </li>
+              <li>
+                <a className="dropdown-item" href="#">
+                  Illustrations
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <button className="search-button">
+            <i className="fas fa-search"></i>
+          </button>
         </div>
+
         <ul className="list-inline mt-4">
           <li className="list-inline-item me-3">
             <Link className="text-decoration-none text-black" to="#">
