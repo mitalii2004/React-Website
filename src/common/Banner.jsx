@@ -1,8 +1,10 @@
 // import React from 'react'
-import "/Style.css";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Banner = () => {
+  const [selectedOption, setSelectedOption] = useState("Shots");
+
   return (
     <section
       id="hero"
@@ -17,55 +19,50 @@ const Banner = () => {
           Explore work from the most talented and accomplished designers
           <br /> ready to take on your next project
         </h6>
-        {/* <div className="input-group mt-4 w-50 mx-auto">
-          <input
-            type="text"
-            className="form-control text-decoration-none"
-            placeholder="What are you looking for?"
-          />
-          <button className="search-button">
-            <i className="fas fa-search"></i> Search
-          </button>
-        </div> */}
-        <div className="input-group mt-4 w-50 mx-auto">
-          <input
-            type="text"
-            className="form-control text-decoration-none"
-            placeholder="What are you looking for?"
-          />
+        <div className="search-container mt-4 w-50 mx-auto">
+          <div className="input-group">
+            {/* Search Input */}
+            <input
+              type="text"
+              className="form-control border-0"
+              placeholder="What are you looking for?"
+            />
 
-          <div className="dropdown">
-            <button
-              className="btn btn-light dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Shots
+            {/* Dropdown */}
+            <div className="dropdown">
+              <button
+                className="btn dropdown-toggle border-0"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {selectedOption}
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => setSelectedOption("Shots")}
+                  >
+                    Shots
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => setSelectedOption("Designers")}
+                  >
+                    Designers
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Search Button */}
+            <button className="btn rounded-circle search-btn">
+              <i className="fas fa-search text-white"></i>
             </button>
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li>
-                <a className="dropdown-item" href="#">
-                  Shots
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Designs
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Illustrations
-                </a>
-              </li>
-            </ul>
           </div>
-
-          <button className="search-button">
-            <i className="fas fa-search"></i>
-          </button>
         </div>
 
         <ul className="list-inline mt-4">
@@ -106,8 +103,53 @@ const Banner = () => {
           </li>
         </ul>
       </div>
+
+      <style>
+        {`
+  
+  .search-container {
+  background: #f5f5f5;
+  border-radius: 30px;
+  padding: 5px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  background: none;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.form-control {
+  background: none;
+  border-radius: 30px;
+}
+
+.dropdown-toggle {
+  background: none;
+  font-weight: bold;
+}
+
+.search-btn {
+  background: #e91e63;
+  width: 40px;
+  height: 40px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+}
+  .search-btn:hover{
+  background: #e91e63;
+  }
+
+  `}
+      </style>
     </section>
   );
 };
 
 export default Banner;
+
