@@ -1,17 +1,10 @@
-// import React from 'react'
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 const Banner = () => {
-  const [selectedOption, setSelectedOption] = useState("Shots");
-
   return (
-    <section
-      id="hero"
-      className="d-flex align-items-center text-center py-5 bg-white"
-    >
+    <section id="hero" className="d-flex align-items-center text-center py-5 bg-white">
       <div className="container">
-        <h1 className="display-1  ">
+        <h1 className="display-1">
           Discover the worlds
           <br /> top designers
         </h1>
@@ -20,40 +13,19 @@ const Banner = () => {
           <br /> ready to take on your next project
         </h6>
         <div className="search-container mt-4 w-50 mx-auto">
-          <div className="input-group">
+          <div className="input-group position-relative">
             {/* Search Input */}
-            <input
-              type="text"
-              className="form-control border-0"
-              placeholder="What are you looking for?"
-            />
+            <input type="text" className="form-control border-0" placeholder="What are you looking for?" />
 
             {/* Dropdown */}
             <div className="dropdown">
-              <button
-                className="btn dropdown-toggle border-0"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                {selectedOption}
-              </button>
+              <button className="btn dropdown-toggle border-0">Shots</button>
               <ul className="dropdown-menu">
                 <li>
-                  <button
-                    className="dropdown-item"
-                    onClick={() => setSelectedOption("Shots")}
-                  >
-                    Shots
-                  </button>
+                  <button className="dropdown-item">Shots</button>
                 </li>
                 <li>
-                  <button
-                    className="dropdown-item"
-                    onClick={() => setSelectedOption("Designers")}
-                  >
-                    Designers
-                  </button>
+                  <button className="dropdown-item">Designers</button>
                 </li>
               </ul>
             </div>
@@ -106,50 +78,79 @@ const Banner = () => {
 
       <style>
         {`
-  
-  .search-container {
-  background: #f5f5f5;
-  border-radius: 30px;
-  padding: 5px;
-}
+          .search-container {
+            background: #f5f5f5;
+            border-radius: 30px;
+            padding: 5px;
+            position: relative;
+            overflow: visible;
+          }
 
-.input-group {
-  display: flex;
-  align-items: center;
-  background: none;
-  border-radius: 30px;
-  overflow: hidden;
-}
+          .input-group {
+            display: flex;
+            align-items: center;
+            background: none;
+            border-radius: 30px;
+            overflow: visible;
+          }
 
-.form-control {
-  background: none;
-  border-radius: 30px;
-}
+          .form-control {
+            background: none;
+            border-radius: 30px;
+          }
 
-.dropdown-toggle {
-  background: none;
-  font-weight: bold;
-}
+          .dropdown {
+            position: relative;
+          }
 
-.search-btn {
-  background: #e91e63;
-  width: 40px;
-  height: 40px;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 5px;
-}
-  .search-btn:hover{
-  background: #e91e63;
-  }
+          .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            min-width: 150px;
+            padding: 5px 0;
+          }
 
-  `}
+          .dropdown:hover .dropdown-menu {
+            display: block;
+          }
+
+          .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            text-align: left;
+            width: 100%;
+          }
+
+          .dropdown-item:hover {
+            background: #f5f5f5;
+          }
+
+          .search-btn {
+            background: #e91e63;
+            width: 40px;
+            height: 40px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5px;
+          }
+
+          .search-btn:hover {
+            background: #e91e63;
+          }
+        `}
       </style>
     </section>
   );
 };
 
 export default Banner;
-

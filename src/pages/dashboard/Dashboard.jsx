@@ -66,7 +66,7 @@ const Dashboard = () => {
 
         <nav className="nav">
           <Link
-            className="btn btn-light text-black border-black px-3 discover-btn"
+            className="btn btn-light text-black custom-filter-btn"
             to="/discover"
           >
             Discover
