@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { FaUsers, FaFileAlt, FaBriefcase, FaHandshake } from "react-icons/fa";
 const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
@@ -58,12 +58,13 @@ const Navbar = () => {
                 >
                   <li>
                     <Link className="dropdown-item" to="/product-design">
-                      Popular
+                      <i className="fas fa-star me-2"></i> Popular
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/product-design">
-                      New and Noteworthy
+                      <i className="fas fa-fire me-2 text-danger"></i> New and
+                      Noteworthy
                     </Link>
                   </li>
                   <hr />
@@ -131,22 +132,24 @@ const Navbar = () => {
                 >
                   <li>
                     <Link className="dropdown-item" to="/browse-designers">
-                      Browse Designers
+                      <FaUsers className="me-2 text-primary" /> Browse Designers
                     </Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/submit-brief">
-                      Submit a Project Brief
+                      <FaFileAlt className="me-2 text-info" /> Submit a Project
+                      Brief
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/submit-brief">
-                      Post a Job
+                    <Link className="dropdown-item" to="/post-job">
+                      <FaBriefcase className="me-2 text-success" /> Post a Job
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/submit-brief">
-                      Hiring on Dribbble
+                    <Link className="dropdown-item" to="/hiring">
+                      <FaHandshake className="me-2 text-warning" /> Hiring on
+                      Dribbble
                     </Link>
                   </li>
                 </ul>
