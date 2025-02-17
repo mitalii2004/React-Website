@@ -51,7 +51,7 @@ const Navbar = () => {
                 className="form-control"
                 placeholder="What are you looking for?"
               />
-              
+
               <button className="btn rounded-circle search-btn">
                 <i className="fas fa-search text-white"></i>
               </button>

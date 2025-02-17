@@ -6,10 +6,10 @@ const Banner = () => (
     className="d-flex align-items-center text-center py-5 bg-white"
   >
     <div className="container">
-      <h1 className="display-1">
+      <h1 className="display-1 fw-normal">
         Discover the world&apos;s <br /> top designers
       </h1>
-      <h6 className="mt-3">
+      <h6 className="mt-4">
         Explore work from the most talented and accomplished designers
         <br /> ready to take on your next project
       </h6>

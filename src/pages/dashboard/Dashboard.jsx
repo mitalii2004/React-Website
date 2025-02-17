@@ -187,7 +187,7 @@ const Dashboard = () => {
       {/* Infinite Scrolling Carousel */}
       <div className="container mt-4">
         <h3 className="text-center mb-3">Featured Categories</h3>
-
+        <br />
         <div
           className="carousel-container"
           onMouseEnter={() => setPause(true)}
@@ -216,8 +216,8 @@ const Dashboard = () => {
         {`
         .discover-btn:active,
 .discover-btn:focus {
-  pointer-events: none; /* Disables hover & click effects */
-  background-color: #f8f9fa !important; /* Keeps default Bootstrap light color */
+  pointer-events: none; 
+  background-color: #f8f9fa !important; 
   color: black !important;
   border-color: black !important;
 }
@@ -262,7 +262,7 @@ const Dashboard = () => {
             display: flex;
            gap: 20px;
           width: max-content;
-          animation: scroll 30s linear infinite; /* Speed slow karne ke liye time badhaya */
+          animation: scroll 40s linear infinite;
           overflow-x: auto;
           scroll-behavior: smooth;
           }
