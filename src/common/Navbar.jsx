@@ -1,8 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaUsers, FaFileAlt, FaBriefcase, FaHandshake } from "react-icons/fa";
 const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
+
+  const [showSearch, setShowSearch] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const searchBar = document.getElementById("hero"); // Get the banner section
+      if (!searchBar) return;
+
+      const searchBarBottom = searchBar.getBoundingClientRect().bottom;
+
+      // Show search if banner scrolls out of view
+      if (searchBarBottom <= 0) {
+        setShowSearch(true);
+      } else {
+        setShowSearch(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleMouseEnter = (dropdown) => {
     setOpenDropdown(dropdown);
@@ -23,6 +44,19 @@ const Navbar = () => {
           >
             Dribbble
           </Link>
+          {showSearch && (
+            <div className="navbar-search-container">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="What are you looking for?"
+              />
+              
+              <button className="btn rounded-circle search-btn">
+                <i className="fas fa-search text-white"></i>
+              </button>
+            </div>
+          )}
 
           {/* Toggle Button for Mobile */}
           <button
@@ -39,7 +73,7 @@ const Navbar = () => {
 
           {/* Navbar Links */}
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto align-items-center">
+            <ul className="navbar-nav me-auto align-items-left">
               {/* Explore Dropdown */}
               <li
                 className="nav-item dropdown"
@@ -87,27 +121,27 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/animation">
+                    <Link className="dropdown-item" to="/branding">
                       Branding
                     </Link>
                   </li>{" "}
                   <li>
-                    <Link className="dropdown-item" to="/animation">
+                    <Link className="dropdown-item" to="/illustration">
                       Illustration
                     </Link>
                   </li>{" "}
                   <li>
-                    <Link className="dropdown-item" to="/animation">
+                    <Link className="dropdown-item" to="/mobile">
                       Mobile
                     </Link>
                   </li>{" "}
                   <li>
-                    <Link className="dropdown-item" to="/animation">
+                    <Link className="dropdown-item" to="/typography">
                       Typography
                     </Link>
                   </li>{" "}
                   <li>
-                    <Link className="dropdown-item" to="/animation">
+                    <Link className="dropdown-item" to="/print">
                       Print
                     </Link>
                   </li>
@@ -213,7 +247,63 @@ const Navbar = () => {
           .dropdown-menu.show {
             display: block;
           }
+
+          
         `}
+      </style>
+      <style>
+        {`
+    .navbar-search-container {
+    width:100%;
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      background: #F0F0F0;
+      color: black;
+      padding: 5px;
+      border-radius: 25px;
+    }
+    .navbar-search-container input {
+      border: none;
+      background: none;
+      outline: none;
+      padding: 5px;
+    }
+  `}
+      </style>
+
+      <style>
+        {`
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      background: white;
+    }
+
+  
+
+    .navbar-collapse {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .navbar-nav {
+      flex-grow: 1;
+      justify-content: left; 
+    }
+
+    .d-flex {
+      justify-content: flex-end;
+    }
+
+    /* To prevent overlap with content */
+    body {
+      padding-top: 70px; /* Adjust based on navbar height */
+    }
+  `}
       </style>
     </>
   );

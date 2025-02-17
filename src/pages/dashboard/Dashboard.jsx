@@ -207,7 +207,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
+      <br />
+      <br />
       <Footer />
 
       {/* Styles */}
