@@ -1,4 +1,3 @@
-// // import React from 'react'
 import { useState } from "react";
 import { FaHeart, FaEye } from "react-icons/fa";
 
@@ -111,18 +110,25 @@ const cardsData = [
 
 const Card = () => {
   const [likedItems, setLikedItems] = useState({});
+  const [likeCounts, setLikeCounts] = useState(
+    Object.fromEntries(cardsData.map(({ id, likes }) => [id, likes]))
+  );
 
   const toggleLike = (id) => {
     setLikedItems((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
+    setLikeCounts((prev) => ({
+      ...prev,
+      [id]: prev[id] + (likedItems[id] ? -1 : 1),
+    }));
   };
 
   return (
     <div className="container">
       <div className="row row-cols-1 row-cols-md-4 g-4">
-        {cardsData.map(({ id, type, src, text, views, likes }) => (
+        {cardsData.map(({ id, type, src, text, views }) => (
           <div key={id} className="col">
             <div className="card w-20 h-20 shadow-lg border-0 rounded flex flex-col items-center justify-center">
               {type === "video" ? (
@@ -138,10 +144,8 @@ const Card = () => {
                   alt={`Card ${id}`}
                 />
               )}
-
               <div className="card-footer bg-light w-100 d-flex justify-content-between align-items-center p-2">
                 <div className="text-muted">{text}</div>
-
                 <div className="d-flex gap-2">
                   <FaHeart
                     className={`cursor-pointer ${
@@ -150,7 +154,7 @@ const Card = () => {
                     onClick={() => toggleLike(id)}
                     size={20}
                   />
-                  {likes}
+                  {likeCounts[id]}
                   <FaEye className="text-primary" size={20} />
                   {views}
                 </div>
