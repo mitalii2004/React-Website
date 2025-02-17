@@ -1,5 +1,7 @@
+
+
 import { useState } from "react";
-import { FaHeart, FaEye } from "react-icons/fa";
+import { FaHeart, FaBookmark, FaEye } from "react-icons/fa";
 
 const cardsData = [
   {
@@ -113,12 +115,14 @@ const Card = () => {
   const [likeCounts, setLikeCounts] = useState(
     Object.fromEntries(cardsData.map(({ id, likes }) => [id, likes]))
   );
+  const [hoveredCard, setHoveredCard] = useState(null);
 
   const toggleLike = (id) => {
     setLikedItems((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
+
     setLikeCounts((prev) => ({
       ...prev,
       [id]: prev[id] + (likedItems[id] ? -1 : 1),
@@ -129,24 +133,46 @@ const Card = () => {
     <div className="container">
       <div className="row row-cols-1 row-cols-md-4 g-4">
         {cardsData.map(({ id, type, src, text, views }) => (
-          <div key={id} className="col">
-            <div className="card w-20 h-20 shadow-lg border-0 rounded flex flex-col items-center justify-center">
+          <div
+            key={id}
+            className="col position-relative"
+            onMouseEnter={() => setHoveredCard(id)}
+            onMouseLeave={() => setHoveredCard(null)}
+          >
+            <div className="card  border-0 rounded overflow-hidden">
               {type === "video" ? (
                 <video
                   src={src}
-                  className="w-26 h-26 object-cover rounded"
+                  className="w-100 h-100 object-cover rounded mb-50px"
                   controls
                 />
               ) : (
                 <img
                   src={src}
-                  className="w-16 h-16 object-contain"
+                  className="w-100 h-100 object-contain"
                   alt={`Card ${id}`}
                 />
               )}
+
+              {/* Hover Options */}
+              {hoveredCard === id && (
+                <div className="hover-options">
+                  <div className="option-box">
+                    <FaBookmark size={22} />
+                  </div>
+                  <div className="option-box" onClick={() => toggleLike(id)}>
+                    <FaHeart
+                      className={likedItems[id] ? "text-danger" : ""}
+                      size={22}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Footer */}
               <div className="card-footer bg-light w-100 d-flex justify-content-between align-items-center p-2">
                 <div className="text-muted">{text}</div>
-                <div className="d-flex gap-2">
+                <div className="d-flex gap-2 align-items-center">
                   <FaHeart
                     className={`cursor-pointer ${
                       likedItems[id] ? "text-danger" : "text-secondary"
@@ -163,6 +189,59 @@ const Card = () => {
           </div>
         ))}
       </div>
+
+      {/* CSS */}
+      <style>
+        {`
+          .card {
+            position: relative;
+            overflow: hidden;
+          }
+
+          .hover-options {
+        
+        
+            position: absolute;
+            bottom: 30%;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+          }
+
+          .col:hover .hover-options {
+            opacity: 1;
+            
+          }
+
+          .option-box {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px #f8f9fa;
+            cursor: pointer;
+            // transition: background-color 0.3s ease-in-out;
+          }
+
+          .option-box:hover {
+            background-color: #f8f9fa;
+          }
+
+          .icon {
+            transition: color 0.3s ease-in-out;
+            color
+          }
+
+          .icon:hover {
+            color: #ea4c89;
+          }
+        `}
+      </style>
     </div>
   );
 };
