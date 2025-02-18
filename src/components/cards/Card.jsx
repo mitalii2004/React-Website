@@ -109,12 +109,12 @@ const cardsData = [
 ];
 
 const Card = () => {
-  // const [selectedCard, setSelectedCard] = useState(null);
   const [likedItems, setLikedItems] = useState({});
   const [likeCounts, setLikeCounts] = useState(
     Object.fromEntries(cardsData.map(({ id, likes }) => [id, likes]))
   );
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   const toggleLike = (id) => {
     setLikedItems((prev) => ({
@@ -130,108 +130,77 @@ const Card = () => {
 
   return (
     <div className="container">
-{/*       
-      {selectedCard ? (
-        <div className="detail-view text-center">
-          <button className="back-btn" onClick={() => setSelectedCard(null)}>
-            ⬅ Back
-          </button>
-          <img
-            src={selectedCard.src}
-            className="w-50 rounded"
-            alt={selectedCard.text}
-          />
-          <h2 className="mt-3">{selectedCard.text}</h2>
-          <p className="text-muted">
-            <FaEye className="text-primary" /> {selectedCard.views} Views |
-            <FaHeart className="text-danger" /> {selectedCard.likes} Likes
-          </p>
-        </div>
-      ) : (
-        <div className="row row-cols-1 row-cols-md-4 g-4">
-          {cardsData.map((card) => (
-            <div
-              key={card.id}
-              className="col"
-              onClick={() => setSelectedCard(card)}
-            >
-              <div className="card border-0 rounded overflow-hidden cursor-pointer">
-                <img
-                  src={card.src}
-                  className="w-100 h-100 object-cover"
-                  alt={card.text}
-                />
-                <div className="card-footer bg-light d-flex justify-content-between p-2">
-                  <div>{card.text}</div>
-                  <div>
-                    <FaHeart className="text-danger" /> {card.likes}{" "}
-                    <FaEye className="text-primary" /> {card.views}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )} */}
-
       <div className="row row-cols-1 row-cols-md-4 g-4">
-        {cardsData.map(({ id, type, src, text, views }) => (
+        {cardsData.map((card) => (
           <div
-            key={id}
+            key={card.id}
             className="col position-relative"
-            onMouseEnter={() => setHoveredCard(id)}
+            onMouseEnter={() => setHoveredCard(card.id)}
             onMouseLeave={() => setHoveredCard(null)}
+            onClick={() => setSelectedCard(card)}
           >
-            <div className="card  border-0 rounded overflow-hidden">
-              {type === "video" ? (
-                <video
-                  src={src}
-                  className="w-100 h-100 object-cover rounded mb-50px"
-                  controls
-                />
-              ) : (
-                <img
-                  src={src}
-                  className="w-100 h-100 object-contain"
-                  alt={`Card ${id}`}
-                />
-              )}
-
-              {/* Hover Options */}
-              {hoveredCard === id && (
+            <div className="card border-0 rounded overflow-hidden">
+              <img
+                src={card.src}
+                className="w-100 h-100 object-contain"
+                alt={`Card ${card.id}`}
+              />
+              {hoveredCard === card.id && (
                 <div className="hover-options">
                   <div className="option-box">
                     <FaBookmark size={22} />
                   </div>
-                  <div className="option-box" onClick={() => toggleLike(id)}>
+                  <div
+                    className="option-box"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleLike(card.id);
+                    }}
+                  >
                     <FaHeart
-                      className={likedItems[id] ? "text-danger" : ""}
+                      className={likedItems[card.id] ? "text-danger" : ""}
                       size={22}
                     />
                   </div>
                 </div>
               )}
-
-              {/* Footer */}
-              <div className="card-footer bg-light w-100 d-flex justify-content-between align-items-center p-2 ">
-                <div className="text-muted ">{text}</div>
-                <div className="d-flex gap-2 align-items-center ">
+              <div className="card-footer bg-light w-100 d-flex justify-content-between align-items-center p-2">
+                <div className="text-muted">{card.text}</div>
+                <div className="d-flex gap-2 align-items-center">
                   <FaHeart
                     className={`cursor-pointer ${
-                      likedItems[id] ? "text-danger" : "text-secondary "
+                      likedItems[card.id] ? "text-danger" : "text-secondary"
                     }`}
-                    onClick={() => toggleLike(id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleLike(card.id);
+                    }}
                     size={20}
                   />
-                  {likeCounts[id]}
+                  {likeCounts[card.id]}
                   <FaEye className="text-primary" size={20} />
-                  {views}
+                  {card.views}
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+      {selectedCard && (
+        <div className="detail-view">
+          <button className="back-btn" onClick={() => setSelectedCard(null)}>
+            Close
+          </button>
+          <img
+            src={selectedCard.src}
+            alt={selectedCard.text}
+            className="detail-image-small"
+          />
+          <h2>{selectedCard.text}</h2>
+          <p>Views: {selectedCard.views}</p>
+          <p>Likes: {likeCounts[selectedCard.id]}</p>
+        </div>
+      )}
 
       {/* CSS */}
       <style>
@@ -288,14 +257,18 @@ const Card = () => {
       <style>
         {`
           .cursor-pointer { cursor: pointer; }
-          .detail-view { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-            background: white; display: flex; flex-direction: column; 
+          .detail-view {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: white; display: flex; flex-direction: column;
             justify-content: center; align-items: center; z-index: 1000;
           }
+          .detail-image-small {
+            max-width: 70%;
+            height: 70%;
+          }
           .back-btn {
-            position: absolute; top: 20px; left: 20px; background: black; 
-            color: white; border: none; padding: 10px 15px; cursor: pointer; 
+            position: absolute; top: 20px; left: 20px; background: black;
+            color: white; border: none; padding: 10px 15px; cursor: pointer;
             border-radius: 5px;
           }
         `}
