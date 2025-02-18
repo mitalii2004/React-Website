@@ -60,7 +60,9 @@ const Login = () => {
               <button className="btn btn-light w-100 mb-3 border custom-input">
                 <i className="fab fa-google me-2"></i> Sign in with Google
               </button>
-              <p className="text-center text-muted divider">or sign in with email</p>
+              <p className="text-center text-muted divider">
+                or sign in with email
+              </p>
               {/* <hr /> */}
               <form>
                 <div className="mb-3">

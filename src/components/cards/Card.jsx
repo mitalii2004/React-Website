@@ -278,3 +278,6 @@ const Card = () => {
 };
 
 export default Card;
+
+// 1028318878770-rkftk8040ci6srumki2070ao6ej7mg66.apps.googleusercontent.com-----client-id
+//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----client-secret

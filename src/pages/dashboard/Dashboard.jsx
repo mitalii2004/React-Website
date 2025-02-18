@@ -260,7 +260,7 @@ const Dashboard = () => {
 
           .carousel-track {
             display: flex;
-           gap: 20px;
+           gap: 40px;
           width: max-content;
           animation: scroll 40s linear infinite;
           overflow-x: auto;
