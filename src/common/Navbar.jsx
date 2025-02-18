@@ -52,6 +52,19 @@ const Navbar = () => {
                 placeholder="What are you looking for?"
               />
 
+              {/* Dropdown */}
+              <div className="dropdown">
+                <button className="btn dropdown-toggle border-0">Shots</button>
+                <ul className="dropdown-menu">
+                  <li>
+                    <button className="dropdown-item">Shots</button>
+                  </li>
+                  <li>
+                    <button className="dropdown-item">Designers</button>
+                  </li>
+                </ul>
+              </div>
+
               <button className="btn rounded-circle search-btn">
                 <i className="fas fa-search text-white"></i>
               </button>
