@@ -1,8 +1,32 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      const response = await axios.post("http://localhost:3000/users/login", {
+        search:email,
+        password,
+      });
+
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+     console.log("response",response);
+     
+      navigate("/");
+    } catch (error) {
+      setError("Invalid fields",error);
+    }
+  };
 
   return (
     <div className="container-fluid vh-100 d-flex">
@@ -63,14 +87,18 @@ const Login = () => {
               <p className="text-center text-muted divider">
                 or sign in with email
               </p>
-              {/* <hr /> */}
-              <form>
+
+              {error && <p className="text-danger text-center">{error}</p>}
+
+              <form onSubmit={handleLogin}>
                 <div className="mb-3">
                   <label className="form-label">Username or Email</label>
                   <input
                     type="text"
                     className="form-control custom-input"
-                    placeholder="Enter email..."
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -78,7 +106,9 @@ const Login = () => {
                   <input
                     type="password"
                     className="form-control custom-input"
-                    placeholder="Enter password..."
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                   <div className="text-end">
                     <button
