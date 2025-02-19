@@ -17,8 +17,7 @@ const Login = () => {
       const response = await axios.post("http://localhost:3000/users/login", {
         search:email,
         password,
-      });
-
+      });     
       localStorage.setItem("user", JSON.stringify(response.data.user));
      console.log("response",response);
      

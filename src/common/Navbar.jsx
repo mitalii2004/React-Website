@@ -22,7 +22,8 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("user");
+    console.log(JSON.parse(token),"hiiiiii")
     if (!token) {
       Swal.fire({
         icon: "error",
@@ -36,9 +37,10 @@ const Navbar = () => {
         "http://localhost:3000/users/logout",
         { deviceToken: "abc" },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { authorization: `Bearer ${JSON.parse(token).token}` },
         }
       );
+      localStorage.clear()
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -271,7 +273,7 @@ const Navbar = () => {
                 <div className="user-container">
                   <span className="user-name">{user.name}</span>
                   <button
-                    className="logout_button px-4 py-2 rounded-lg"
+                    className="logout_button px-4 py-1 rounded-lg rounded-pill text-white bg-black"
                     onClick={handleLogout}
                   >
                     Logout
