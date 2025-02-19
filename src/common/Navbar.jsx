@@ -1,34 +1,28 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaUsers, FaFileAlt, FaBriefcase, FaHandshake } from "react-icons/fa";
+
 const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
-
   const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const searchBar = document.getElementById("hero"); // Get the banner section
+      const searchBar = document.getElementById("hero"); 
       if (!searchBar) return;
-
       const searchBarBottom = searchBar.getBoundingClientRect().bottom;
-
-      // Show search if banner scrolls out of view
       if (searchBarBottom <= 0) {
         setShowSearch(true);
       } else {
         setShowSearch(false);
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
   const handleMouseEnter = (dropdown) => {
     setOpenDropdown(dropdown);
   };
-
   const handleMouseLeave = () => {
     setOpenDropdown(null);
   };
@@ -37,6 +31,7 @@ const Navbar = () => {
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-white">
         <div className="container">
+
           {/* Logo */}
           <Link
             className="navbar-brand dribbble-text fw-bold fst-italic"
@@ -64,7 +59,6 @@ const Navbar = () => {
                   </li>
                 </ul>
               </div>
-
               <button className="btn rounded-circle search-btn">
                 <i className="fas fa-search text-white"></i>
               </button>
@@ -239,83 +233,72 @@ const Navbar = () => {
       <style>
         {`
         .dribbble-text {
-  font-family: "Pacifico", cursive !important;  /* Cursive font */
-  font-size: 30px !important;  /* Adjust text size */
-  color: #05000d !important; /* Dark color */
-  text-decoration: none !important;
-}
-
-.dribbble-text:hover {
-  color: #ea4c89 !important; /* Dribbble pink on hover */
-  transition: color 0.3s ease-in-out;
-}
-
-          .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-          }
-          .dropdown-menu.show {
-            display: block;
-          }
-
-          
-        `}
+          font-family: "Pacifico", cursive !important;  /* Cursive font */
+          font-size: 30px !important;  /* Adjust text size */
+          color: #05000d !important; /* Dark color */
+          text-decoration: none !important;
+        }
+       .dribbble-text:hover {
+          color: #ea4c89 !important; /* Dribbble pink on hover */
+          transition: color 0.3s ease-in-out;
+        }
+        .dropdown-menu {
+          display: none;
+          position: absolute;
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .dropdown-menu.show {
+          display: block;
+        }
+       `}
       </style>
       <style>
         {`
-    .navbar-search-container {
-    width:100%;
-      display: flex;
-      align-items: center;
-      gap: 25px;
-      background: #F0F0F0;
-      color: black;
-      padding: 5px;
-      border-radius: 25px;
-    }
-    .navbar-search-container input {
-      border: none;
-      background: none;
-      outline: none;
-      padding: 5px;
-    }
-  `}
+         .navbar-search-container {
+          width:100%;
+          display: flex;
+          align-items: center;
+          gap: 25px;
+          background: #F0F0F0;
+          color: black;
+          padding: 5px;
+          border-radius: 25px;
+        }
+        .navbar-search-container input {
+          border: none;
+          background: none;
+          outline: none;
+          padding: 5px;
+        }
+       `}
       </style>
-
       <style>
         {`
-    .navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      background: white;
-    }
-
-  
-
-    .navbar-collapse {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    .navbar-nav {
-      flex-grow: 1;
-      justify-content: left; 
-    }
-
-    .d-flex {
-      justify-content: flex-end;
-    }
-
-    /* To prevent overlap with content */
-    body {
-      padding-top: 70px; /* Adjust based on navbar height */
-    }
+         .navbar {
+           position: fixed;
+           top: 0;
+           width: 100%;
+           z-index: 1000;
+           background: white;
+          }
+          .navbar-collapse {
+           display: flex;
+           justify-content: space-between;
+           width: 100%;
+          }
+          .navbar-nav {
+           flex-grow: 1;
+           justify-content: left; 
+          }
+          .d-flex {
+           justify-content: flex-end;
+          }
+        /* To prevent overlap with content */
+          body {
+           padding-top: 70px; /* Adjust based on navbar height */
+          }
   `}
       </style>
     </>

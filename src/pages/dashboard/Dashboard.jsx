@@ -213,98 +213,86 @@ const Dashboard = () => {
 
       {/* Styles */}
       <style>
-        {`
+      {`
         .discover-btn:active,
-.discover-btn:focus {
-  pointer-events: none; 
-  background-color: #f8f9fa !important; 
-  color: black !important;
-  border-color: black !important;
-}
-
-        .search-button{
-  background: #ff4081;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  text-decoration: none;
-}
-          .scroll-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 20px;
-            cursor: pointer;
-            transition: opacity 0.3s ease-in-out;
-          }
-
-          .custom-filter-btn:hover {
-            background-color: transparent !important;
-            border-color: inherit !important;
-            color: inherit !important;
-          }
-
-          .carousel-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            white-space: nowrap;
-            padding: 10px 0;
-          }
-
-          .carousel-track {
-            display: flex;
-           gap: 40px;
-          width: max-content;
-          animation: scroll 40s linear infinite;
-          overflow-x: auto;
-          scroll-behavior: smooth;
-          }
-
-          @keyframes scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-
-           .carousel-slide {
-             flex: 0 0 auto;
-             width: 200px;
-             text-align: center;
-           }
-
-        
-
-          .carousel-btn {
-             position: absolute;
-             top: 50%;
-             transform: translateY(-50%);
-             background: rgba(0, 0, 0, 0.5);
-             color: white;
-             border: none;
-             padding: 10px 15px;
-             cursor: pointer;
-             font-size: 20px;
-             border-radius: 50%;
-             z-index: 10;
-           }
-
-           .carousel-btn.left {
-             left: 10px;
-           }
-
-           .carousel-btn.right {
-             right: 10px;
-           }
-
-           .carousel-btn:hover {
-             background: rgba(0, 0, 0, 0.8);
-         }
+        .discover-btn:focus {
+        pointer-events: none; 
+        background-color: #f8f9fa !important; 
+        color: black !important;
+        border-color: black !important;
+      }
+      .search-button{
+        background: #ff4081;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+      .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #333;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        transition: opacity 0.3s ease-in-out;
+      }
+      .custom-filter-btn:hover {
+        background-color: transparent !important;
+        border-color: inherit !important;
+        color: inherit !important;
+      }
+      .carousel-container {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        white-space: nowrap;
+        padding: 10px 0;
+      }
+      .carousel-track {
+        display: flex;
+        gap: 40px;
+        width: max-content;
+        animation: scroll 40s linear infinite;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+      }
+      @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+      .carousel-slide {
+        flex: 0 0 auto;
+        width: 200px;
+        text-align: center;
+      }
+      .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 20px;
+        border-radius: 50%;
+        z-index: 10;
+      }
+      .carousel-btn.left {
+        left: 10px;
+      }
+      .carousel-btn.right {
+        right: 10px;
+      }
+      .carousel-btn:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
 
         `}
       </style>

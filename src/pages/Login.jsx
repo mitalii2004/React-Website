@@ -115,7 +115,6 @@ const Login = () => {
             border-radius: 20px !important;
             padding: 10px 15px;
           }
-
           a {
             color: black !important;
             text-decoration: none ;
