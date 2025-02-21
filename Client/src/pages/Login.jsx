@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "/Style.css"
 
 const Login = () => {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -128,7 +129,7 @@ const Login = () => {
               </form>
               <p className="mt-3 text-center">
                 Don’t have an account?{" "}
-                <Link to="/Signup">
+                <Link to="/SignUp">
                   <u>Sign up</u>
                 </Link>
               </p>
@@ -137,19 +138,7 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Custom CSS */}
-      <style>
-        {`
-          .custom-input {
-            border-radius: 20px !important;
-            padding: 10px 15px;
-          }
-          a {
-            color: black !important;
-            text-decoration: none ;
-          }
-        `}
-      </style>
+      
     </div>
   );
 };

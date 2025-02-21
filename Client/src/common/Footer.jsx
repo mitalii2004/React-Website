@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "/Style.css"
 
 const Footer = () => {
   return (
@@ -80,20 +81,6 @@ const Footer = () => {
           <br />
         </div>
       </div>
-      <style>
-        {`
-         .dribbble-text {
-           font-family: "Pacifico", cursive !important;  /* Cursive font */
-           font-size: 30px !important;  /* Adjust text size */
-           color: #05000d !important; /* Dark color */
-           text-decoration: none !important;
-          }
-          .dribbble-text:hover {
-           color: #ea4c89 !important; /* Dribbble pink on hover */
-           transition: color 0.3s ease-in-out;
-          }
-        `}
-      </style>
     </div>
   );
 };

@@ -23,7 +23,6 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     const token = localStorage.getItem("user");
-    console.log(JSON.parse(token),"hiiiiii")
     if (!token) {
       Swal.fire({
         icon: "error",
@@ -110,7 +109,7 @@ const Navbar = () => {
                   </li>
                 </ul>
               </div>
-              <button className="btn rounded-circle search-btn">
+              <button className="rounded-circle search-btn">
                 <i className="fas fa-search text-white"></i>
               </button>
             </div>
@@ -317,10 +316,6 @@ const Navbar = () => {
         .dropdown-menu.show {
           display: block;
         }
-       `}
-      </style>
-      <style>
-        {`
          .navbar-search-container {
           width:100%;
           display: flex;
@@ -337,10 +332,6 @@ const Navbar = () => {
           outline: none;
           padding: 5px;
         }
-       `}
-      </style>
-      <style>
-        {`
          .navbar {
            position: fixed;
            top: 0;

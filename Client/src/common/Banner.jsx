@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "/Style.css";
 
 const Banner = () => (
   <section
@@ -18,7 +19,7 @@ const Banner = () => (
           {/* Search Input */}
           <input
             type="text"
-            className="form-control border-0"
+            className="form-control border-2"
             placeholder="What are you looking for?"
           />
 
@@ -36,7 +37,7 @@ const Banner = () => (
           </div>
 
           {/* Search Button */}
-          <button className="btn rounded-circle search-btn">
+          <button className="rounded-circle search-btn">
             <i className="fas fa-search text-white"></i>
           </button>
         </div>
@@ -80,80 +81,6 @@ const Banner = () => (
         </li>
       </ul>
     </div>
-
-    <style>
-      {`
-          .search-container {
-            background: #f5f5f5;
-            border-radius: 30px;
-            padding: 5px;
-            position: relative;
-            overflow: visible;
-          }
-
-          .input-group {
-            display: flex;
-            align-items: center;
-            background: none;
-            border-radius: 30px;
-            overflow: visible;
-          }
-
-          .form-control {
-            background: none;
-            border-radius: 30px;
-          }
-
-          .dropdown {
-            position: relative;
-          }
-
-          .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            min-width: 150px;
-            padding: 5px 0;
-          }
-
-          .dropdown:hover .dropdown-menu {
-            display: block;
-          }
-
-          .dropdown-item {
-            padding: 10px 15px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            text-align: left;
-            width: 100%;
-          }
-
-          .dropdown-item:hover {
-            background: #f5f5f5;
-          }
-
-          .search-btn {
-            background: #e91e63;
-            width: 40px;
-            height: 40px;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 5px;
-          }
-
-          .search-btn:hover {
-            background: #e91e63;
-          }
-        `}
-    </style>
   </section>
 );
 

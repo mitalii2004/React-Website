@@ -153,35 +153,6 @@ const SignUp = () => {
           </p>
         </div>
       </div>
-
-      {/* Custom CSS */}
-      <style>
-        {`           
-          .form-container {             
-            width: 100%;             
-            max-width: 400px;             
-            background: #fff;             
-            border-radius: 10px;           
-          }                                  
-          .custom-input {             
-            border-radius: 20px !important;             
-            padding: 12px;             
-            font-weight: 500;           
-          }            
-
-          a {             
-            color: black !important;             
-            text-decoration: none;           
-          }            
-
-          @media (max-width: 768px) {             
-            .form-container {               
-              max-width: 100%;               
-              padding: 20px;             
-            }           
-          }         
-        `}
-      </style>
     </div>
   );
 };

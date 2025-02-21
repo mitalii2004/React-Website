@@ -1,112 +1,9 @@
 import { useState } from "react";
 import { FaHeart, FaBookmark, FaEye } from "react-icons/fa";
+import constants from "../../utils/constants";
 
-const cardsData = [
-  {
-    id: 1,
-    type: "image",
-    src: "12th.webp",
-    text: "Ramotion",
-    views: "10.7k",
-    likes: 127,
-  },
-  {
-    id: 2,
-    type: "image",
-    src: "2nd.webp",
-    text: "Nixtio",
-    views: "5.4k",
-    likes: 89,
-  },
-  {
-    id: 3,
-    type: "image",
-    src: "3rd.webp",
-    text: "HALO LAB",
-    views: "7.2k",
-    likes: 112,
-  },
-  {
-    id: 4,
-    type: "image",
-    src: "4th.webp",
-    text: "Recently updated",
-    views: "8.3k",
-    likes: 98,
-  },
-  {
-    id: 5,
-    type: "image",
-    src: "5th.webp",
-    text: "Trending now",
-    views: "12.1k",
-    likes: 145,
-  },
-  {
-    id: 6,
-    type: "image",
-    src: "6th.webp",
-    text: "Creative Design",
-    views: "15.2k",
-    likes: 210,
-  },
-  {
-    id: 7,
-    type: "image",
-    src: "7th.webp",
-    text: "Just added",
-    views: "6.8k",
-    likes: 76,
-  },
-  {
-    id: 8,
-    type: "image",
-    src: "8th.webp",
-    text: "New Release",
-    views: "9.4k",
-    likes: 134,
-  },
-  {
-    id: 9,
-    type: "image",
-    src: "9th.webp",
-    text: "Popular this week",
-    views: "11.6k",
-    likes: 198,
-  },
-  {
-    id: 10,
-    type: "image",
-    src: "10th.webp",
-    text: "Top Rated",
-    views: "14.5k",
-    likes: 256,
-  },
-  {
-    id: 11,
-    type: "image",
-    src: "11th.webp",
-    text: "Editor's Pick",
-    views: "13.7k",
-    likes: 178,
-  },
-  {
-    id: 12,
-    type: "image",
-    src: "12th.webp",
-    text: "User Favorite",
-    views: "16.2k",
-    likes: 312,
-  },
-  {
-    id: 13,
-    type: "image",
-    src: "11th.webp",
-    text: "Ramotion",
-    views: "10.7k",
-    likes: 127,
-  },
-];
+const cardsData = constants; 
+console.log("Imported Cards Data:", cardsData);
 
 const Card = () => {
   const [likedItems, setLikedItems] = useState({});
@@ -116,16 +13,18 @@ const Card = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
 
+  // ✅ Fixed toggleLike function to use functional updates
   const toggleLike = (id) => {
-    setLikedItems((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    setLikedItems((prev) => {
+      const isLiked = !prev[id];
 
-    setLikeCounts((prev) => ({
-      ...prev,
-      [id]: prev[id] + (likedItems[id] ? -1 : 1),
-    }));
+      setLikeCounts((prevCounts) => ({
+        ...prevCounts,
+        [id]: prevCounts[id] + (isLiked ? 1 : -1),
+      }));
+
+      return { ...prev, [id]: isLiked };
+    });
   };
 
   return (
@@ -186,6 +85,7 @@ const Card = () => {
           </div>
         ))}
       </div>
+
       {selectedCard && (
         <div className="detail-view">
           <button className="back-btn" onClick={() => setSelectedCard(null)}>
@@ -202,7 +102,7 @@ const Card = () => {
         </div>
       )}
 
-      {/* CSS */}
+      {/* ✅ Fixed CSS */}
       <style>
         {`
           .card {
@@ -211,8 +111,7 @@ const Card = () => {
           }
 
           .hover-options {
-        
-        border-radius:25px;
+            border-radius: 25px;
             position: absolute;
             bottom: 30%;
             right: 10px;
@@ -223,8 +122,7 @@ const Card = () => {
           }
 
           .col:hover .hover-options {
-            opacity: 2;
-            
+            opacity: 1;
           }
 
           .option-box {
@@ -246,16 +144,12 @@ const Card = () => {
 
           .icon {
             transition: color 0.3s ease-in-out;
-            color
           }
 
           .icon:hover {
             color: #ea4c89;
           }
-        `}
-      </style>
-      <style>
-        {`
+
           .cursor-pointer { cursor: pointer; }
           .detail-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
@@ -278,6 +172,3 @@ const Card = () => {
 };
 
 export default Card;
-
-// 1028318878770-rkftk8040ci6srumki2070ao6ej7mg66.apps.googleusercontent.com-----client-id
-//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----client-secret
