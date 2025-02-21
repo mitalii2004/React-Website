@@ -7,6 +7,9 @@ const nodemailer = require("nodemailer");
 const helper = require("../helpers/validationJoi");
 const Models = require("../models/index");
 const secretKey = "secretKey";
+const commonHelper = require("../helpers/commonHelper");
+const crypto = require("crypto");
+const Response = require("../helpers/response");
 
 module.exports = {
 
@@ -108,70 +111,153 @@ module.exports = {
 
     forgotPassword: async (req, res) => {
         try {
-            const { email } = req.body;
-            if (!email) {
-                return res.status(400).json({ message: "Email is required." });
-            }
-            const user = await Models.userModel.findOne({ where: { email } });
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
-            const resetToken = Math.random().toString(36).substring(2, 15);
-            await Models.userModel.update({ resetToken }, { where: { email } });
-            const transporter = nodemailer.createTransport({
-                host: "smtp.gmail.com",
-                port: 587,
-                secure: false,
-                auth: {
-                    user: process.env.EMAIL_USERNAME,
-                    pass: process.env.EMAIL_PASSWORD,
-                },
-                tls: {
-                    rejectUnauthorized: false,
-                },
+            const schema = Joi.object({
+                email: Joi.string().email().required(),
             });
-            const resetLink = `http://localhost:3000/users/resetPassword?token=${resetToken}`;
-            let mailOptions = {
-                from: 'Mitali <mitaligoura@cqlsys.com>',
-                to: email,
-                subject: "Password Reset Instructions",
-                text: `Click the link below to reset your password:\n\n${resetLink}\n\nThis link will expire in 15 minutes.`,
-            };
-            await transporter.sendMail(mailOptions);
-            return res.status(200).json({ message: "Reset instructions sent to your email." ,});
+
+            let payload = await helper.validationJoi(req.body, schema);
+            const { email } = payload;
+
+            const user = await Models.userModel.findOne({
+                where: { email },
+            });
+
+            if (!user) {
+                return commonHelper.failed(res, Response.failed_msg.noAccWEmail);
+            }
+
+            const resetToken = crypto.randomBytes(32).toString("hex");
+            const resetTokenExpires = new Date(Date.now() + 3600000); // 1 hour expiry
+
+            await Models.userModel.update(
+                {
+                    resetToken,
+                    resetTokenExpires: new Date(Date.now() + 3600000).toISOString(), // ✅ Ensures correct format
+                },
+                { where: { email } }
+            );
+
+
+            const resetLink = `${req.protocol}://${req.headers.host}/users/resetPassword?token=${resetToken}`;
+
+            const transporter = await commonHelper.nodeMailer();
+            const emailTemplate = await commonHelper.forgetPasswordLinkHTML(
+                req,
+                user,
+                resetLink,
+                "Reset Password",
+                "forgotPassword"
+            );
+
+            await transporter.sendMail(emailTemplate);
+
+            return commonHelper.success(res, "Password reset link sent successfully!");
         } catch (error) {
-            console.error("Error sending email:", error);
-            res.status(500).json({ message: error.message });
+            console.error("Forgot password error:", error);
+
+            return commonHelper.error(
+                res,
+                Response.error_msg?.forgPwdErr || "Forgot password error",
+                error.message
+            );
         }
     },
 
     resetPassword: async (req, res) => {
         try {
-            const schema = Joi.object({
-                token: Joi.string().required(),
-                newPassword: Joi.string().min(6).required(),
-                confirmPassword: Joi.string().valid(Joi.ref("newPassword")).required(),
+            const { token } = req.query;
+            if (!token) {
+                return res.status(400).json({ success: false, message: "Token is required" });
+            }
+            const user = await Models.userModel.findOne({
+                where: { resetToken: token },
+                raw: true
             });
-            const { error, value } = schema.validate(req.body);
-            if (error) return res.status(400).json({ message: error.details[0].message });
-            const { token, newPassword } = value;
-            let decoded;
-            try {
-                decoded = jwt.verify(token, secretKey);
-            } catch (err) {
-                return res.status(400).json({ message: "Invalid or expired token" });
+            if (!user || user.resetTokenExpires < new Date()) {
+                return res.render("sessionExpire")
             }
-            const user = await Models.userModel.findOne({ where: { email: decoded.email } });
-            if (!user || user.resetToken !== token) {
-                return res.status(400).json({ message: "Invalid or expired token" });
-            }
-            const hashedPassword = await bcrypt.hash(newPassword, 10);
-            await user.update({ password: hashedPassword, resetToken: null });
-            res.json({ message: "Password reset successful." });
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ message: "Something went wrong" });
+            return res.render("changePassword", { data: user })
+        } catch (error) {
+            console.error("Reset password error:", error);
+            return commonHelper.error(
+                res,
+                Response.error_msg.resetPwdErr,
+                error.message
+            );
         }
-    }
+    },
+
+    changePassword: async (req, res) => {
+        console.log("req.body", req.body)
+        try {
+            const schema = Joi.object({
+                newPassword: Joi.string().min(6).required(),
+                confirmPassword: Joi.string().valid(Joi.ref("newPassword")).required()
+                    .messages({ "any.only": "Passwords do not match" }),
+            }).unknown(true);
+
+            const { error, value } = schema.validate(req.body);
+            if (error) {
+                return res.status(400).json({ message: error.details[0].message });
+            }
+
+            const { newPassword } = value;
+
+            // Hash new password and update
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            await Models.userModel.update({ password: hashedPassword }, { where: { id: req.body.id } });
+            res.render("successPassword")
+            // return res.status(200).json({ message: "Password reset successfully!" });
+
+        } catch (err) {
+            console.error("Error during password reset:", err);
+            return res.status(500).json({ message: "Server error", error: err.message });
+        }
+    },
+
+    resendForgotPasswordLink: async (req, res) => {
+        try {
+            const schema = Joi.object({
+                email: Joi.string().email().required(),
+            });
+
+            let payload = await helper.validationJoi(req.body, schema);
+            const { email } = payload;
+
+            const user = await Models.userModel.findOne({
+                where: { email },
+            });
+
+            if (!user) {
+                return commonHelper.failed(res, Response.failed_msg.noAccWEmail);
+            }
+
+            const resetToken = crypto.randomBytes(32).toString("hex");
+            const resetTokenExpires = new Date(Date.now() + 3600000);
+
+            await Models.userModel.update(
+                { resetToken, resetTokenExpires },
+                { where: { email } }
+            );
+
+            const resetUrl = `${req.protocol}://${req.headers.host}/users/resetPassword?token=${resetToken}`;
+
+            const transporter = await commonHelper.nodeMailer();
+            const emailTemplate = await commonHelper.forgetPasswordLinkHTML(
+                req,
+                user,
+                resetUrl,
+                "Reset Password"
+            );
+
+            await transporter.sendMail(emailTemplate);
+
+            return commonHelper.success(res, Response.success_msg.passwordLink);
+        } catch (error) {
+            console.error("Resend forgot password error:", error);
+            return commonHelper.error(res, Response.error_msg.forgPwdErr, error.message);
+        }
+    },
+
 
 }  
