@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "/Style.css"
+import "/Style.css";
 
 const Login = () => {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -10,21 +10,35 @@ const Login = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/users/forgotPassword",
+        { email }
+      );
+      alert(response.data.message);
+      setIsForgotPassword(false);
+      setEmail("");
+    } catch (error) {
+      setError("Error sending reset link. Please try again.", error);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
-
     try {
       const response = await axios.post("http://localhost:3000/users/login", {
-        search:email,
+        search: email,
         password,
-      });     
+      });
       localStorage.setItem("user", JSON.stringify(response.data.user));
-     console.log("response",response);
-     
+      console.log("response", response);
       navigate("/");
     } catch (error) {
-      setError("Invalid fields",error);
+      setError("Invalid email or password.", error);
     }
   };
 
@@ -55,27 +69,35 @@ const Login = () => {
             <div>
               <h2 className="mb-4 text-center">Forgot Password?</h2>
               <p className="text-center text-muted">
-                Enter the email address you used when you joined, and we’ll send
-                <br />
-                you instructions to reset your password.
-                <br />
-                <br />
-                For security reasons, we do NOT store your password. So rest
-                <br />
-                assured that we will never send your password via email.
+                Enter your email and we&asop;ll send you reset instructions.
               </p>
-              <form>
+              {error && <p className="text-danger text-center">{error}</p>}
+              <form onSubmit={handleForgotPassword}>
                 <div className="mb-3">
                   <label className="form-label">Email Address</label>
-                  <input type="email" className="form-control custom-input" />
+                  <input
+                    type="email"
+                    className="form-control custom-input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
                 </div>
                 <button
                   type="submit"
-                  className="btn btn-dark w-50 custom-input"
+                  className="btn btn-dark w-100 custom-input"
                 >
                   Send Reset Instructions
                 </button>
               </form>
+              <p className="mt-3 text-center">
+                <button
+                  className="btn btn-link text-black"
+                  onClick={() => setIsForgotPassword(false)}
+                >
+                  Back to Login
+                </button>
+              </p>
             </div>
           ) : (
             // Login Form
@@ -137,8 +159,6 @@ const Login = () => {
           )}
         </div>
       </div>
-
-      
     </div>
   );
 };

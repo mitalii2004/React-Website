@@ -21,14 +21,17 @@ module.exports = {
                 email: Joi.string().email().required(),
                 password: Joi.string().min(6).required()
             });
+
             let payload = await helper.validationJoi(req.body, schema);
             if (!payload) {
                 return res.status(400).json({ message: "Invalid request data" });
             }
+
             let userExist = await Models.userModel.findOne({ where: { email: payload.email } });
             if (userExist) {
                 return res.status(400).json({ msg: "User already exists with the same email" });
             }
+
             const hashedPassword = await bcrypt.hash(payload.password, 10);
             let newUser = await Models.userModel.create({
                 name: payload.name,
@@ -36,9 +39,12 @@ module.exports = {
                 email: payload.email,
                 password: hashedPassword
             });
+
             return res.status(201).json({ msg: "User registered successfully", user: newUser });
+
         } catch (error) {
-            throw error
+            console.error("Signup error:", error);  // Logs the actual error
+            return res.status(500).json({ msg: "Internal server error", error: error.message });
         }
     },
 
@@ -258,6 +264,5 @@ module.exports = {
             return commonHelper.error(res, Response.error_msg.forgPwdErr, error.message);
         }
     },
-
 
 }  
