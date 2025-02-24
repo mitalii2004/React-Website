@@ -62,7 +62,7 @@ module.exports = {
             const { userDetail, password } = payload;
             const isEmail = userDetail.includes("@");
             const user = await Models.userModel.findOne({
-                where: isEmail ? { email: userDetail } : { userName: userDetail } 
+                where: isEmail ? { email: userDetail } : { userName: userDetail }
             });
             if (!user) {
                 return res.status(401).json({ message: "Invalid credentials." });
@@ -108,37 +108,28 @@ module.exports = {
         }
     },
 
+
     forgotPassword: async (req, res) => {
         try {
             const schema = Joi.object({
                 email: Joi.string().email().required(),
             });
-
             let payload = await helper.validationJoi(req.body, schema);
             const { email } = payload;
-
-            const user = await Models.userModel.findOne({
-                where: { email },
-            });
+            const user = await Models.userModel.findOne({ where: { email } });
 
             if (!user) {
-                return commonHelper.failed(res, Response.failed_msg.noAccWEmail);
+                return commonHelper.failed(res, Response?.failed_msg?.noAccWEmail || "No account found with this email.");
             }
 
             const resetToken = crypto.randomBytes(32).toString("hex");
-            const resetTokenExpires = new Date(Date.now() + 3600000); // 1 hour expiry
+            const resetTokenExpires = new Date(Date.now() + 3600000).toISOString(); // 1 hour expiry
 
             await Models.userModel.update(
-                {
-                    resetToken,
-                    resetTokenExpires: new Date(Date.now() + 3600000).toISOString(), // ✅ Ensures correct format
-                },
+                { resetToken, resetTokenExpires },
                 { where: { email } }
             );
-
-
-            const resetLink = `${req.protocol}://${req.headers.host}/users/resetPassword?token=${resetToken}`;
-
+            const resetLink = `${req.protocol}://${req.get("host")}/users/resetPassword?token=${resetToken}`;
             const transporter = await commonHelper.nodeMailer();
             const emailTemplate = await commonHelper.forgetPasswordLinkHTML(
                 req,
@@ -147,20 +138,18 @@ module.exports = {
                 "Reset Password",
                 "forgotPassword"
             );
-
             await transporter.sendMail(emailTemplate);
-
             return commonHelper.success(res, "Password reset link sent successfully!");
         } catch (error) {
             console.error("Forgot password error:", error);
-
             return commonHelper.error(
                 res,
-                Response.error_msg?.forgPwdErr || "Forgot password error",
+                Response?.error_msg?.forgPwdErr || "Forgot password error",
                 error.message
             );
         }
     },
+
 
     resetPassword: async (req, res) => {
         try {
@@ -258,5 +247,4 @@ module.exports = {
         }
     },
 
-}  
- 
+}

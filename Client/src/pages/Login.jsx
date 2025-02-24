@@ -5,14 +5,73 @@ import "/Style.css";
 
 const Login = () => {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [email, setEmail] = useState("");
+  const [userDetail, setUserDetail] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
+
+  const isValidEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
+  const isValidUsername = (username) => /^[a-zA-Z0-9_]+$/.test(username);
+
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!userDetail.trim()) {
+      newErrors.userDetail = "Username or Email is required";
+    } else if (!isValidEmail(userDetail) && !isValidUsername(userDetail)) {
+      newErrors.userDetail = "Enter a valid email or username (no spaces)";
+    }
+
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Incorrect Password";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Handle Login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setError(null);
+
+    if (!validateForm()) return;
+
+    try {
+      const response = await axios.post("http://localhost:3000/users/login", {
+        userDetail,
+        password,
+      });
+
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      console.log("Login successful:", response);
+      navigate("/");
+    } catch (error) {
+      setError("Invalid email, username, or password.", error);
+    }
+  };
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
+    setSubmitted(true);
     setError(null);
+
+    let newErrors = {};
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!isValidEmail(email)) {
+      newErrors.email = "Enter a valid email address";
+    }
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
     try {
       const response = await axios.post(
         "http://localhost:3000/users/forgotPassword",
@@ -21,24 +80,10 @@ const Login = () => {
       alert(response.data.message);
       setIsForgotPassword(false);
       setEmail("");
+      setSubmitted(false);
+      setErrors({});
     } catch (error) {
       setError("Error sending reset link. Please try again.", error);
-    }
-  };
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError(null);
-    try {
-      const response = await axios.post("http://localhost:3000/users/login", {
-        userDetail: email,
-        password,
-      });
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      console.log("response", response);
-      navigate("/");
-    } catch (error) {
-      setError("Invalid email or password.", error);
     }
   };
 
@@ -69,7 +114,7 @@ const Login = () => {
             <div>
               <h2 className="mb-4 text-center">Forgot Password?</h2>
               <p className="text-center text-muted">
-                Enter your email and we&asop;ll send you reset instructions.
+                Enter your email and we’ll send you reset instructions.
               </p>
               {error && <p className="text-danger text-center">{error}</p>}
               <form onSubmit={handleForgotPassword}>
@@ -80,8 +125,10 @@ const Login = () => {
                     className="form-control custom-input"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    required
                   />
+                  {submitted && errors.email && (
+                    <p className="text-danger small">{errors.email}</p>
+                  )}
                 </div>
                 <button
                   type="submit"
@@ -118,10 +165,12 @@ const Login = () => {
                   <input
                     type="text"
                     className="form-control custom-input"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
+                    value={userDetail}
+                    onChange={(e) => setUserDetail(e.target.value)}
                   />
+                  {submitted && errors.userDetail && (
+                    <p className="text-danger small">{errors.userDetail}</p>
+                  )}
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Password</label>
@@ -130,8 +179,10 @@ const Login = () => {
                     className="form-control custom-input"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    required
                   />
+                  {submitted && errors.password && (
+                    <p className="text-danger small">{errors.password}</p>
+                  )}
                   <div className="text-end">
                     <button
                       type="button"

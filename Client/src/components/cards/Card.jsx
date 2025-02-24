@@ -97,7 +97,10 @@ const Card = () => {
             className="col position-relative"
             onMouseEnter={() => setHoveredCard(card.id)}
             onMouseLeave={() => setHoveredCard(null)}
-            onClick={() => setSelectedCard(card)}
+            onClick={(e) => {
+              e.stopPropagation(); 
+              setSelectedCard(card);
+            }}
           >
             <div className="card border-0 rounded overflow-hidden">
               <img
@@ -147,10 +150,14 @@ const Card = () => {
                 <div className="detail-view">
                   <button
                     className="back-btn"
-                    onClick={() => setSelectedCard(null)}
+                    onClick={(e) => {
+                      e.stopPropagation(); 
+                      setSelectedCard(null);
+                    }}
                   >
                     Close
                   </button>
+
                   <img
                     src={selectedCard.src}
                     alt={selectedCard.text}
@@ -251,7 +258,20 @@ const Card = () => {
       )}
       <style>
         {`
-        .auth-modal {
+        .detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+ .auth-modal {
   position: fixed;
   top: 0;
   left: 0;
