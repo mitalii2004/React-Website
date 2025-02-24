@@ -31,7 +31,7 @@ const Login = () => {
     setError(null);
     try {
       const response = await axios.post("http://localhost:3000/users/login", {
-        search: email,
+        userDetail: email,
         password,
       });
       localStorage.setItem("user", JSON.stringify(response.data.user));

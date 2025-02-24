@@ -51,45 +51,38 @@ module.exports = {
     login: async (req, res) => {
         try {
             const schema = Joi.object({
-                search: Joi.string().required(),
+                userDetail: Joi.string().required(),
                 password: Joi.string().required(),
-                deviceToken: "abc"
+                deviceToken: Joi.string().optional()
             });
             let payload = await helper.validationJoi(req.body, schema);
             if (!payload) {
                 return res.status(400).json({ message: "Invalid request data" });
             }
-            const { search, password } = payload;
+            const { userDetail, password } = payload;
+            const isEmail = userDetail.includes("@");
             const user = await Models.userModel.findOne({
-                $or: [
-                    { email: search },
-                    { userName: search }
-                ]
+                where: isEmail ? { email: userDetail } : { userName: userDetail } 
             });
             if (!user) {
-                const hashedPassword = await bcrypt.hash(password, 10);
-                const newUser = {
-                    email: search.includes('@') ? search : null,
-                    userName: search.includes('@') ? null : search,
-                    password: hashedPassword
-                };
-                const response = await Models.userModel.create(newUser);
-                return res.status(201).json({
-                    message: `User created successfully.`,
-                    user: response
-                });
+                return res.status(401).json({ message: "Invalid credentials." });
+            }
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: "Invalid credentials." });
             }
             const token = jwt.sign(
                 { id: user.id, email: user.email },
                 secretKey,
+                { expiresIn: "1h" }
             );
-            user.dataValues.token = token
             return res.status(200).json({
-                message: 'Login successful.',
-                user
+                message: "Login successful.",
+                user: { ...user.toJSON(), token }
             });
         } catch (error) {
-            throw error
+            console.error("Login Error:", error);
+            return res.status(500).json({ message: "Internal server error" });
         }
     },
 
@@ -266,3 +259,4 @@ module.exports = {
     },
 
 }  
+ 

@@ -151,24 +151,24 @@ const Navbar = () => {
                   aria-labelledby="exploreDropdown"
                 >
                   <li>
-                    <Link className="dropdown-item" to="/product-design">
+                    <Link className="dropdown-item" to="/popular">
                       <i className="fas fa-star me-2 text-black"></i> Popular
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/product-design">
+                    <Link className="dropdown-item" to="/newNetworthy">
                       <i className="fas fa-fire me-2 text-danger text-black"></i>
                       New and Noteworthy
                     </Link>
                   </li>
                   <hr />
                   <li>
-                    <Link className="dropdown-item" to="/product-design">
+                    <Link className="dropdown-item" to="/productdesign">
                       Product Design
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/web-design">
+                    <Link className="dropdown-item" to="/webDesign">
                       Web Design
                     </Link>
                   </li>
@@ -225,19 +225,19 @@ const Navbar = () => {
                   aria-labelledby="hireDropdown"
                 >
                   <li>
-                    <Link className="dropdown-item" to="/browse-designers">
+                    <Link className="dropdown-item" to="/browseDesigners">
                       <FaUsers className="me-2 text-primary text-black" />{" "}
                       Browse Designers
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/submit-brief">
+                    <Link className="dropdown-item" to="/submitBrief">
                       <FaFileAlt className="me-2 text-info text-black" /> Submit
                       a Project Brief
                     </Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/post-job">
+                    <Link className="dropdown-item" to="/postJob">
                       <FaBriefcase className="me-2 text-success text-black" />{" "}
                       Post a Job
                     </Link>
@@ -253,7 +253,7 @@ const Navbar = () => {
 
               {/* Find Jobs */}
               <li className="nav-item">
-                <Link className="nav-link text-black" to="/find-jobs">
+                <Link className="nav-link text-black" to="/findJobs">
                   Find Jobs
                 </Link>
               </li>

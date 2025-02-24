@@ -4,8 +4,7 @@ import "/Style.css";
 const Banner = () => (
   <section
     id="hero"
-    className="d-flex align-items-center text-center py-5 bg-white"
-  >
+    className="d-flex align-items-center text-center py-5 bg-white">
     <div className="container">
       <h1 className="display-1 fw-normal">
         Discover the world&apos;s <br /> top designers
