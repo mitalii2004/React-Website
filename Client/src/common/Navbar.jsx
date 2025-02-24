@@ -39,7 +39,7 @@ const Navbar = () => {
           headers: { authorization: `Bearer ${JSON.parse(token).token}` },
         }
       );
-      localStorage.clear()
+      localStorage.clear();
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -269,7 +269,7 @@ const Navbar = () => {
             {/* Auth Buttons */}
             <div className="d-flex gap-2">
               {user ? (
-                <div className="user-container">
+                <div className="user-container d-flex align-items-center gap-3">
                   <span className="user-name">{user.name}</span>
                   <button
                     className="logout_button px-4 py-1 rounded-lg rounded-pill text-white bg-black"
@@ -280,10 +280,10 @@ const Navbar = () => {
                 </div>
               ) : (
                 <>
-                  <Link to="/signup" className="btn fw-bold">
+                  <Link to="/SignUp" className="btn fw-bold">
                     Sign Up
                   </Link>
-                  <Link to="/login" className="btn text-white bg-dark">
+                  <Link to="/Login" className="btn text-white bg-dark">
                     Log In
                   </Link>
                 </>
