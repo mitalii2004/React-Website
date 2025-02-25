@@ -29,24 +29,39 @@ const SignUp = () => {
     else if (password.length < 6)
       newErrors.password = "Password must be at least 6 characters long";
 
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      if (!agreeTerms) {
-        newErrors.agreeTerms = "You must agree to the terms & conditions";
-      }
-    }
+    if (!agreeTerms)
+      newErrors.agreeTerms = "You must agree to the terms & conditions";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  // ✅ Handle Input Change & Remove Errors
+  const handleInputChange = (e, field) => {
+    const { value } = e.target;
+
+    if (field === "name") setName(value);
+    if (field === "userName") setUserName(value);
+    if (field === "email") setEmail(value);
+    if (field === "password") setPassword(value);
+    if (field === "agreeTerms") setAgreeTerms(e.target.checked);
+
+    // Agar field fill ho jaye to uska error hata do
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      if (value.trim() !== "" || (field === "agreeTerms" && e.target.checked)) {
+        delete newErrors[field];
+      }
+      return newErrors;
+    });
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     setSubmitted(true);
-
+  
     if (!validateForm()) return;
-
+  
     try {
       const response = await axios.post("http://localhost:3000/users/signUp", {
         name,
@@ -54,39 +69,23 @@ const SignUp = () => {
         email,
         password,
       });
-      console.log(response);
-      toast.success("Signup Successful!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-
+  
+      console.log("Signup successful:", response);
+  
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      toast.success("Signup Successful!");
+  
       setTimeout(() => {
         navigate("/");
-      }, 3500);
+      }, 1500);
     } catch (error) {
-      console.error("Signup Error:", error.response?.data || error);
       setError(
         error.response?.data?.message || "Signup failed. Please try again."
       );
-
-      toast.error("Sign Up Failed!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error("Sign Up Failed!");
     }
   };
+  
 
   return (
     <div className="container-fluid vh-100 d-flex">
@@ -162,7 +161,7 @@ const SignUp = () => {
                     type="text"
                     className="form-control custom-input"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => handleInputChange(e, "name")}
                   />
                   {submitted && errors.name && (
                     <p className="text-danger small">{errors.name}</p>
@@ -175,7 +174,7 @@ const SignUp = () => {
                     type="text"
                     className="form-control custom-input"
                     value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
+                    onChange={(e) => handleInputChange(e, "userName")}
                   />
                   {submitted && errors.userName && (
                     <p className="text-danger small">{errors.userName}</p>
@@ -188,7 +187,7 @@ const SignUp = () => {
                     type="email"
                     className="form-control custom-input"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => handleInputChange(e, "email")}
                   />
                   {submitted && errors.email && (
                     <p className="text-danger small">{errors.email}</p>
@@ -201,7 +200,7 @@ const SignUp = () => {
                     type="password"
                     className="form-control custom-input"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => handleInputChange(e, "password")}
                   />
                   {submitted && errors.password && (
                     <p className="text-danger small">{errors.password}</p>
@@ -214,7 +213,7 @@ const SignUp = () => {
                     className="form-check-input"
                     id="termsCheck"
                     checked={agreeTerms}
-                    onChange={(e) => setAgreeTerms(e.target.checked)}
+                    onChange={(e) => handleInputChange(e, "agreeTerms")}
                   />
                   <label className="form-check-label small text-muted">
                     I agree to Dribbble’s{" "}
