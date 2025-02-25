@@ -76,7 +76,7 @@ const SignUp = () => {
         error.response?.data?.message || "Signup failed. Please try again."
       );
 
-      toast.error("Sign Up Failed", {
+      toast.error("Sign Up Failed!", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
