@@ -108,7 +108,6 @@ module.exports = {
         }
     },
 
-
     forgotPassword: async (req, res) => {
         try {
             const schema = Joi.object({
@@ -116,10 +115,10 @@ module.exports = {
             });
             let payload = await helper.validationJoi(req.body, schema);
             const { email } = payload;
-            const user = await Models.userModel.findOne({ where: { email } });
+            const user = await Models.userModel.findOne({ where: { email: email } });
 
             if (!user) {
-                return commonHelper.failed(res, Response?.failed_msg?.noAccWEmail || "No account found with this email.");
+                return commonHelper.error(res, Response?.failed_msg?.noAccWEmail || "No account found with this email.");
             }
 
             const resetToken = crypto.randomBytes(32).toString("hex");
@@ -127,7 +126,7 @@ module.exports = {
 
             await Models.userModel.update(
                 { resetToken, resetTokenExpires },
-                { where: { email } }
+                { where: { email: email } }
             );
             const resetLink = `${req.protocol}://${req.get("host")}/users/resetPassword?token=${resetToken}`;
             const transporter = await commonHelper.nodeMailer();
@@ -149,7 +148,6 @@ module.exports = {
             );
         }
     },
-
 
     resetPassword: async (req, res) => {
         try {

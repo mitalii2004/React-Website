@@ -21,21 +21,17 @@ const Card = () => {
   const navigate = useNavigate();
 
   const isLoggedIn = () => !!localStorage.getItem("user");
-
   const toggleLike = (id) => {
     if (!isLoggedIn()) {
       setShowAuthModal(true);
       return;
     }
-
     setLikedItems((prev) => {
       const isLiked = !prev[id];
-
       setLikeCounts((prevCounts) => ({
         ...prevCounts,
         [id]: prevCounts[id] + (isLiked ? 1 : -1),
       }));
-
       return { ...prev, [id]: isLiked };
     });
   };
@@ -46,15 +42,10 @@ const Card = () => {
         userDetail,
         password,
       });
-
       if (response.data?.user) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         console.log("response", response);
-
-        // Close the modal
         setShowAuthModal(false);
-
-        // Navigate to home
         setTimeout(() => navigate("/"), 100);
       } else {
         alert("Invalid login response!");
@@ -74,7 +65,6 @@ const Card = () => {
         },
         body: JSON.stringify({ fullName, userDetail, password }),
       });
-
       const data = await response.json();
       if (response.ok) {
         alert("Signup Successful! Please Login.");

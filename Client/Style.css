@@ -15,9 +15,9 @@
 }
 .form-control {
   background: none;
-  border-radius: 20px !important; /* Ensure the border-radius applies */
-  border: 2px solid #ccc; /* Optional: Add border for better visibility */
-  padding: 10px 15px; /* Adjust padding for a better look */
+  border-radius: 20px !important;
+  border: 2px solid #ccc;
+  padding: 10px 15px;
 }
 .dropdown {
   position: relative;
@@ -49,6 +49,7 @@
   background: #f5f5f5;
 }
 .search-btn {
+  width:100%;
   background: #e91e63;
   width: 40px;
   height: 40px;
@@ -59,18 +60,18 @@
   margin-right: 5px;
 }
 .search-btn:hover {
-  background: #e91e63;
+  background: lightcoral;
 }
 
 /*Footer css*/
 .dribbble-text {
-  font-family: "Pacifico", cursive !important; /* Cursive font */
-  font-size: 30px !important; /* Adjust text size */
-  color: #05000d !important; /* Dark color */
+  font-family: "Pacifico", cursive !important;
+  font-size: 30px !important; 
+  color: #05000d !important;
   text-decoration: none !important;
 }
 .dribbble-text:hover {
-  color: #ea4c89 !important; /* Dribbble pink on hover */
+  color: #ea4c89 !important; 
   transition: color 0.3s ease-in-out;
 }
 

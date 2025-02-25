@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "/Style.css";
 
 const SignUp = () => {
@@ -12,7 +14,7 @@ const SignUp = () => {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false); // Track form submission
+  const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -21,15 +23,15 @@ const SignUp = () => {
     if (!name.trim()) newErrors.name = "Name is required";
     if (!userName.trim()) newErrors.userName = "Username is required";
     if (!email.trim()) newErrors.email = "Email is required";
-    else if (!/^\S+@\S+\.\S+$/.test(email)) newErrors.email = "Invalid email format";
+    else if (!/^\S+@\S+\.\S+$/.test(email))
+      newErrors.email = "Invalid email format";
 
     if (!password.trim()) newErrors.password = "Password is required";
-    else if (password.length < 6) newErrors.password = "Password must be at least 6 characters long";
+    else if (password.length < 6)
+      newErrors.password = "Password must be at least 6 characters long";
 
-    // Set errors but don't check the checkbox yet
     setErrors(newErrors);
 
-    // If no input errors, then check the checkbox validation
     if (Object.keys(newErrors).length === 0) {
       if (!agreeTerms) {
         newErrors.agreeTerms = "You must agree to the terms & conditions";
@@ -42,9 +44,9 @@ const SignUp = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    setSubmitted(true); // Mark form as submitted
+    setSubmitted(true);
 
-    if (!validateForm()) return; // Stop if validation fails
+    if (!validateForm()) return;
 
     try {
       const response = await axios.post("http://localhost:3000/users/signUp", {
@@ -53,17 +55,43 @@ const SignUp = () => {
         email,
         password,
       });
+      console.log(response);
+      toast.success("Signup Successful!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
 
-      console.log("Signup success:", response.data);
-      navigate("/");
+      setTimeout(() => {
+        navigate("/");
+      }, 3500);
     } catch (error) {
       console.error("Signup Error:", error.response?.data || error);
-      setError(error.response?.data?.message || "Signup failed. Please try again.");
+      setError(
+        error.response?.data?.message || "Signup failed. Please try again."
+      );
+
+      toast.error("Sign Up Failed", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
   return (
     <div className="container-fluid vh-100 d-flex">
+      <ToastContainer />
       <div className="d-none d-md-flex col-md-4 bg-dark text-white align-items-center justify-content-center position-relative">
         <h1
           className="position-absolute top-0 start-0 m-3 fst-italic"
@@ -137,7 +165,9 @@ const SignUp = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
-                  {submitted && errors.name && <p className="text-danger small">{errors.name}</p>}
+                  {submitted && errors.name && (
+                    <p className="text-danger small">{errors.name}</p>
+                  )}
                 </div>
 
                 <div className="mb-3">
@@ -148,7 +178,9 @@ const SignUp = () => {
                     value={userName}
                     onChange={(e) => setUserName(e.target.value)}
                   />
-                  {submitted && errors.userName && <p className="text-danger small">{errors.userName}</p>}
+                  {submitted && errors.userName && (
+                    <p className="text-danger small">{errors.userName}</p>
+                  )}
                 </div>
 
                 <div className="mb-3">
@@ -159,7 +191,9 @@ const SignUp = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  {submitted && errors.email && <p className="text-danger small">{errors.email}</p>}
+                  {submitted && errors.email && (
+                    <p className="text-danger small">{errors.email}</p>
+                  )}
                 </div>
 
                 <div className="mb-3">
@@ -170,7 +204,9 @@ const SignUp = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  {submitted && errors.password && <p className="text-danger small">{errors.password}</p>}
+                  {submitted && errors.password && (
+                    <p className="text-danger small">{errors.password}</p>
+                  )}
                 </div>
 
                 <div className="mb-3 form-check">
@@ -196,22 +232,20 @@ const SignUp = () => {
                     </Link>
                     .
                   </label>
-                  {submitted && errors.agreeTerms && <p className="text-danger small">{errors.agreeTerms}</p>}
+                  {submitted && errors.agreeTerms && (
+                    <p className="text-danger small">{errors.agreeTerms}</p>
+                  )}
                 </div>
 
-                <button type="submit" className="btn btn-dark w-100 mb-2 custom-input">
+                <button
+                  type="submit"
+                  className="btn btn-dark w-100 mb-2 custom-input"
+                >
                   Create Account
                 </button>
               </form>
             </>
           )}
-
-          <p className="mt-3 text-center">
-            Already have an account?{" "}
-            <Link to="/Login">
-              <u>Sign In</u>
-            </Link>
-          </p>
         </div>
       </div>
     </div>
