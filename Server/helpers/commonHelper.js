@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const emailTemplate= require("../helpers/emailTemplate")
 
 module.exports = {
 
@@ -41,12 +42,7 @@ module.exports = {
             from: process.env.EMAIL_USERNAME,
             to: user.email,
             subject: subject,
-            html: `
-            <p>Hello ${user.name},</p>
-            <p>Click the link below to reset your password:</p>
-            <a href="${resetUrl}">${resetUrl}</a>
-            <p>If you didn't request this, please ignore this email.</p>
-          `,
+            html: emailTemplate,
         };
     },
     success: (res, message, data = {}) => {
