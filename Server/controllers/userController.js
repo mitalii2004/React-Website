@@ -15,9 +15,13 @@ module.exports = {
 
     signUp: async (req, res) => {
         try {
+            console.log("req.body",req.body);
+            // return
             const schema = Joi.object({
                 name: Joi.string().required(),
                 userName: Joi.string().required(),
+                phoneNumber: Joi.string().required(),
+                countrycode: Joi.string().optional(),
                 email: Joi.string().email().required(),
                 password: Joi.string().min(6).required(),
                 deviceToken: Joi.string().optional()
@@ -31,23 +35,23 @@ module.exports = {
                 return res.status(400).json({ msg: "User already exists with the same email" });
             }
             const hashedPassword = await bcrypt.hash(payload.password, 10);
+            let phoneNumber=payload.phoneNumber;
+            let countrycode=phoneNumber.split(" ")
+            let phone=countrycode[1]
+            let country=countrycode[0]
             let newUser = await Models.userModel.create({
                 name: payload.name,
                 userName: payload.userName,
+                phoneNumber: phone,
+                countrycode: country,
                 email: payload.email,
                 password: hashedPassword
             });
-            const token = jwt.sign(
-                { id: newUser.id, email: newUser.email },
-                secretKey,
-                { expiresIn: "1h" }
-            );
             let user=await Models.userModel.findOne({
                 where:{
                     id:newUser.id
                 },raw:true
             })
-            user.token=token 
             console.log("newUser",user);
             return res.status(201).json({ msg: "User registered successfully", user: user });
         } catch (error) {
@@ -56,6 +60,40 @@ module.exports = {
         }
     },
 
+    otpVerify:async(req,res)=>{
+        try {
+            const schema = Joi.object({
+                phoneNumber: Joi.string().required(),
+                countrycode: Joi.string().required(),
+                otp: Joi.string().required(),
+            });
+            let payload = await helper.validationJoi(req.body, schema);
+            if (!payload) {
+                return res.status(400).json({ message: "Invalid request data" });
+            }
+            let user=await Models.userModel.findOne({
+                where:{
+                    countrycode:payload.countrycode,
+                    phoneNumber:payload.phoneNumber
+                },raw:true
+            })
+            if(payload.otp!=1111){
+             return res.status(400).json({ message: "Invalid otp" });
+            }else{
+                const token = jwt.sign(
+                    { id: user.id },
+                    secretKey,
+                    { expiresIn: "1h" }
+                );
+            user.token=token 
+            return res.status(201).json({ msg: "User registered successfully", user: user });
+            }
+
+        } catch (error) {
+            throw error
+        }
+    },
+    
     login: async (req, res) => {
         try {
             const schema = Joi.object({

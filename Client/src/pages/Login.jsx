@@ -40,7 +40,6 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
   
-
   const handleInputChange = (e, field) => {
     const { value } = e.target;
     let newErrors = { ...errors };
@@ -54,7 +53,7 @@ const Login = () => {
         if (!isValidEmail(value)) {
           newErrors.userDetail = "Invalid email format";
         } else {
-          delete newErrors.userDetail;
+          delete newErrors.userDetail; // Remove error when the full email is valid
         }
       } else if (!isValidUsername(value)) {
         newErrors.userDetail = "Enter a valid username (no spaces)";
@@ -76,19 +75,20 @@ const Login = () => {
   
     if (field === "email") {
       setEmail(value);
+  
+      // Show error until a complete valid email is entered
       if (!value.trim()) {
         newErrors.email = "Email is required";
       } else if (!isValidEmail(value)) {
         newErrors.email = "Invalid email format";
       } else {
-        delete newErrors.email;
+        delete newErrors.email; // Remove error only when full email is correct
       }
     }
   
     setErrors(newErrors);
   };
   
-
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     setSubmitted(true);

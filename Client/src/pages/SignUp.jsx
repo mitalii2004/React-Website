@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import PhoneInput from "react-phone-input-2";
 import "/Style.css";
 
 const SignUp = () => {
@@ -9,6 +10,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [error, setError] = useState(null);
@@ -25,6 +27,9 @@ const SignUp = () => {
     else if (!/^\S+@\S+\.\S+$/.test(email))
       newErrors.email = "Invalid email format";
 
+    if (!phoneNumber.trim() || phoneNumber.length < 10)
+      newErrors.phoneNumber = "Valid phone number is required";
+
     if (!password.trim()) newErrors.password = "Password is required";
     else if (password.length < 6)
       newErrors.password = "Password must be at least 6 characters long";
@@ -36,7 +41,6 @@ const SignUp = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ✅ Handle Input Change & Remove Errors
   const handleInputChange = (e, field) => {
     const { value } = e.target;
 
@@ -46,7 +50,6 @@ const SignUp = () => {
     if (field === "password") setPassword(value);
     if (field === "agreeTerms") setAgreeTerms(e.target.checked);
 
-    // Agar field fill ho jaye to uska error hata do
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
       if (value.trim() !== "" || (field === "agreeTerms" && e.target.checked)) {
@@ -59,24 +62,24 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     setSubmitted(true);
-  
+
     if (!validateForm()) return;
-  
+
     try {
       const response = await axios.post("http://localhost:3000/users/signUp", {
         name,
         userName,
         email,
+        phoneNumber,
         password,
       });
-  
+
       console.log("Signup successful:", response);
-  
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      toast.success("Signup Successful!");
-  
+
+      localStorage.setItem("phoneNumber", JSON.stringify(response.data.user.phoneNumber));
+      toast.success("OTP Successful!");
       setTimeout(() => {
-        navigate("/");
+        navigate("/otpVerify"); 
       }, 1500);
     } catch (error) {
       setError(
@@ -85,7 +88,6 @@ const SignUp = () => {
       toast.error("Sign Up Failed!");
     }
   };
-  
 
   return (
     <div className="container-fluid vh-100 d-flex">
@@ -141,6 +143,12 @@ const SignUp = () => {
                 </Link>
                 .
               </label>
+              <p className="mt-3 text-center">
+                Already have an account?{" "}
+                <Link to="/Login">
+                  <u>Login</u>
+                </Link>
+              </p>
             </>
           ) : (
             <>
@@ -195,6 +203,19 @@ const SignUp = () => {
                 </div>
 
                 <div className="mb-3">
+                  <label className="form-label">Phone Number</label>
+                  <PhoneInput
+                    country={"us"}
+                    value={phoneNumber}
+                    onChange={setPhoneNumber}
+                    inputClass="form-control custom-input"
+                  />
+                  {submitted && errors.phoneNumber && (
+                    <p className="text-danger small">{errors.phoneNumber}</p>
+                  )}
+                </div>
+
+                <div className="mb-3">
                   <label className="form-label">Password</label>
                   <input
                     type="password"
@@ -235,12 +256,16 @@ const SignUp = () => {
                   )}
                 </div>
 
+
+
                 <button
                   type="submit"
                   className="btn btn-dark w-100 mb-2 custom-input"
                 >
                   Create Account
                 </button>
+                <otpVerify/>
+
               </form>
             </>
           )}

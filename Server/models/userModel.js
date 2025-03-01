@@ -13,6 +13,16 @@ module.exports = (Sequelize, sequelize, DataTypes) => {
                 allowNull: true,
                 defaultValue: null,
             },
+            phoneNumber: {
+                type: DataTypes.STRING(255),
+                allowNull: true,
+                defaultValue: null,
+            },
+            countryCode: {
+                type: DataTypes.STRING(255),
+                allowNull: true,
+                defaultValue: null,
+            },
             email: {
                 type: DataTypes.STRING(255),
                 allowNull: true,
