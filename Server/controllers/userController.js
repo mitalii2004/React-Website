@@ -19,97 +19,16 @@ const otpManager = require('node-twillo-otp-manager')
 
 module.exports = {
 
-    // signUp: async (req, res) => {
-    //     try {
-    //         console.log("req.body", req.body);
-    //         const schema = Joi.object({
-    //             name: Joi.string().required(),
-    //             userName: Joi.string().required(),
-    //             phoneNumber: Joi.string().required(),
-    //             countrycode: Joi.string().optional(),
-    //             email: Joi.string().required(),
-    //             password: Joi.string().min(6).required(),
-    //             deviceToken: Joi.string().optional()
-    //         });
-    //         let payload = await helper.validationJoi(req.body, schema);
-    //         if (!payload) {
-    //             return res.status(400).json({ message: "Invalid request data" });
-    //         }
-    //         let userExist = await Models.userModel.findOne({ where: { email: payload.email } });
-    //         if (userExist) {
-    //             return res.status(400).json({ msg: "User already exists with the same email" });
-    //         }
-    //         const hashedPassword = await bcrypt.hash(payload.password, 10);
-    //         let phoneNumber = payload.phoneNumber;
-    //         let countrycode = phoneNumber.split(" ")
-    //         let phone = countrycode[1]
-    //         let country = countrycode[0]
-    //         let newUser = await Models.userModel.create({
-    //             name: payload.name,
-    //             userName: payload.userName,
-    //             phoneNumber: phone,
-    //             countrycode: country,
-    //             email: payload.email,
-    //             password: hashedPassword
-    //         });
-    //         let user = await Models.userModel.findOne({
-    //             where: {
-    //                 id: newUser.id
-    //             }, raw: true
-    //         })
-    //         console.log("newUser", user);
-    //         return res.status(201).json({ msg: "User registered successfully", user: user });
-    //     } catch (error) {
-    //         throw error
-    //     }
-    // },
-
-    // otpVerify: async (req, res) => {
-    //     try {
-    //         const schema = Joi.object({
-    //             phoneNumber: Joi.string().required(),
-    //             countrycode: Joi.string().required(),
-    //             otp: Joi.string().required(),
-    //         });
-    //         let payload = await helper.validationJoi(req.body, schema);
-    //         if (!payload) {
-    //             return res.status(400).json({ message: "Invalid request data" });
-    //         }
-    //         let user = await Models.userModel.findOne({
-    //             where: {
-    //                 countrycode: payload.countrycode,
-    //                 phoneNumber: payload.phoneNumber
-    //             }, raw: true
-    //         })
-    //         if (payload.otp != 1111) {
-    //             return res.status(400).json({ message: "Invalid otp" });
-    //         } else {
-    //             const token = jwt.sign(
-    //                 { id: user.id },
-    //                 secretKey,
-    //                 { expiresIn: "1h" }
-    //             );
-    //             user.token = token
-    //             return res.status(201).json({ msg: "User registered successfully", user: user });
-    //         }
-
-    //     } catch (error) {
-    //         throw error
-    //     }
-    // },
-
     signUp: async (req, res) => {
         try {
             const schema = Joi.object({
                 name: Joi.string().required(),
                 userName: Joi.string().required(),
                 phoneNumber: Joi.string().required(),
-                // countryCode: Joi.string().optional(), 
                 email: Joi.string().required(),
                 password: Joi.string().min(6).required(),
                 deviceToken: Joi.string().optional()
             });
-            
             let payload = await helper.validationJoi(req.body, schema);
             if (!payload) {
                 return res.status(400).json({ message: "Invalid request data" });
@@ -118,13 +37,22 @@ module.exports = {
             if (userExist) {
                 return res.status(400).json({ msg: "User already exists with the same email" });
             }
+            let phoneNumber = payload.phoneNumber;
+            let countryCode = "";
+            if (phoneNumber.startsWith("+")) {
+                let splitArray = phoneNumber.slice(1).split("");
+                countryCode = splitArray.splice(0, 2).join("");
+                phoneNumber = splitArray.join("");
+                if (countryCode === "91") {
+                    countryCode = "";
+                }
+            }
             const hashedPassword = await bcrypt.hash(payload.password, 10);
-            let fullPhoneNumber = payload.countrycode + payload.phoneNumber;
             let newUser = await Models.userModel.create({
                 name: payload.name,
                 userName: payload.userName,
-                phoneNumber: payload.phoneNumber,
-                // countryCode: payload.countryCode,
+                countryCode: countryCode, 
+                phoneNumber: phoneNumber,
                 email: payload.email,
                 password: hashedPassword
             });
@@ -132,48 +60,43 @@ module.exports = {
                 where: { id: newUser.id },
                 raw: true
             });
-            console.log("New User:", user);
-            // await otpManager.sendOtp(fullPhoneNumber);
             return res.status(201).json({ msg: "User registered successfully. OTP sent.", user });
         } catch (error) {
-            throw error
+            throw error;
         }
     },
 
     otpVerify: async (req, res) => {
         try {
-            console.log("reqw,body",req.body);
-            // return
-            
             const schema = Joi.object({
                 phoneNumber: Joi.string().required(),
-                // countrycode: Joi.string().required(),
                 otp: Joi.string().required(),
             });
             let payload = await helper.validationJoi(req.body, schema);
             if (!payload) {
                 return res.status(400).json({ message: "Invalid request data" });
             }
+            let phoneNumber = payload.phoneNumber;
+            let countryCode = "";
+            if (phoneNumber.startsWith("+")) {
+                let splitArray = phoneNumber.slice(1).split("");
+                countryCode = splitArray.splice(0, 2).join("");
+                phoneNumber = splitArray.join("");
+                if (countryCode === "91") {
+                    countryCode = "";
+                }
+            }
             let user = await Models.userModel.findOne({
-                where: {
-                    // countrycode: payload.countrycode,
-                    phoneNumber: payload.phoneNumber
-                },
+                where: { phoneNumber: phoneNumber },
                 raw: true
             });
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            let fullPhoneNumber = payload.countrycode + payload.phoneNumber;
-            let isOtpValid=false
-            // let isOtpValid = await otpManager.verifyOtp(fullPhoneNumber, payload.otp);
-            // if (!isOtpValid) {
-            //     return res.status(400).json({ message: "Invalid OTP" });
-            // }
             const token = jwt.sign({ id: user.id }, "process.env.JWT_SECRET", { expiresIn: "1h" });
             return res.status(200).json({ msg: "OTP verified successfully", token, user });
         } catch (error) {
-            throw error
+            throw error;
         }
     },
 

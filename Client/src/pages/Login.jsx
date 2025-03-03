@@ -53,7 +53,7 @@ const Login = () => {
         if (!isValidEmail(value)) {
           newErrors.userDetail = "Invalid email format";
         } else {
-          delete newErrors.userDetail; // Remove error when the full email is valid
+          delete newErrors.userDetail;
         }
       } else if (!isValidUsername(value)) {
         newErrors.userDetail = "Enter a valid username (no spaces)";
