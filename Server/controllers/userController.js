@@ -51,7 +51,7 @@ module.exports = {
             let newUser = await Models.userModel.create({
                 name: payload.name,
                 userName: payload.userName,
-                countryCode: countryCode, 
+                countryCode: countryCode,
                 phoneNumber: phoneNumber,
                 email: payload.email,
                 password: hashedPassword
