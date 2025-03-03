@@ -86,7 +86,6 @@ const SignUp = () => {
         "phoneNumber",
         JSON.stringify(response.data.user.phoneNumber)
       );
-      localStorage.setItem("user", JSON.stringify(response.data.user));
       toast.success("OTP Sent Successfully!...");
 
       setTimeout(() => {
