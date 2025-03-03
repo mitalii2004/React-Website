@@ -51,27 +51,33 @@ const OTPVerification = () => {
   };
 
   const handleSubmit = async () => {
-    // const phoneNumber = localStorage.getItem("phoneNumber");
     const phoneNumber = JSON.parse(localStorage.getItem("phoneNumber"));
 
     if (!phoneNumber) {
       toast.error("Phone number not found!");
       return;
     }
+
     const otpCode = otp.join("");
     if (otpCode.length !== 4) {
       toast.warning("Please enter a 4-digit OTP.");
       return;
     }
+
     try {
       const response = await fetch("http://localhost:3000/users/otpVerify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ otp: otpCode, phoneNumber }),
       });
+
       const data = await response.json();
+
       if (response.ok) {
         toast.success("OTP Verified Successfully!");
+
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         setTimeout(() => {
           navigate("/");
         }, 2000);

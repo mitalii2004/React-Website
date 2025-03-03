@@ -87,7 +87,7 @@ const SignUp = () => {
         "phoneNumber",
         JSON.stringify(response.data.user.phoneNumber)
       );
-      toast.success("OTP Sent Successfully!");
+      toast.success("OTP Sent Successfully!...");
 
       setTimeout(() => {
         navigate("/otpVerify");
