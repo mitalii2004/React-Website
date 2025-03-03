@@ -76,10 +76,13 @@ const SignUp = () => {
 
       console.log("Signup successful:", response);
 
-      localStorage.setItem("phoneNumber", JSON.stringify(response.data.user.phoneNumber));
+      localStorage.setItem(
+        "phoneNumber",
+        JSON.stringify(response.data.user.phoneNumber)
+      );
       toast.success("OTP Successful!");
       setTimeout(() => {
-        navigate("/otpVerify"); 
+        navigate("/otpVerify");
       }, 1500);
     } catch (error) {
       setError(
@@ -207,9 +210,17 @@ const SignUp = () => {
                   <PhoneInput
                     country={"us"}
                     value={phoneNumber}
-                    onChange={setPhoneNumber}
+                    onChange={(value) => {
+                      setPhoneNumber(value);
+                      setErrors((prevErrors) => {
+                        const newErrors = { ...prevErrors };
+                        if (value.trim() !== "") delete newErrors.phoneNumber;
+                        return newErrors;
+                      });
+                    }}
                     inputClass="form-control custom-input"
                   />
+
                   {submitted && errors.phoneNumber && (
                     <p className="text-danger small">{errors.phoneNumber}</p>
                   )}
@@ -256,16 +267,13 @@ const SignUp = () => {
                   )}
                 </div>
 
-
-
                 <button
                   type="submit"
                   className="btn btn-dark w-100 mb-2 custom-input"
                 >
                   Create Account
                 </button>
-                <otpVerify/>
-
+                <otpVerify />
               </form>
             </>
           )}

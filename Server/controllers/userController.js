@@ -15,14 +15,13 @@ module.exports = {
 
     signUp: async (req, res) => {
         try {
-            console.log("req.body",req.body);
-            // return
+            console.log("req.body", req.body);
             const schema = Joi.object({
                 name: Joi.string().required(),
                 userName: Joi.string().required(),
                 phoneNumber: Joi.string().required(),
                 countrycode: Joi.string().optional(),
-                email: Joi.string().email().required(),
+                email: Joi.string().required(),
                 password: Joi.string().min(6).required(),
                 deviceToken: Joi.string().optional()
             });
@@ -35,10 +34,10 @@ module.exports = {
                 return res.status(400).json({ msg: "User already exists with the same email" });
             }
             const hashedPassword = await bcrypt.hash(payload.password, 10);
-            let phoneNumber=payload.phoneNumber;
-            let countrycode=phoneNumber.split(" ")
-            let phone=countrycode[1]
-            let country=countrycode[0]
+            let phoneNumber = payload.phoneNumber;
+            let countrycode = phoneNumber.split(" ")
+            let phone = countrycode[1]
+            let country = countrycode[0]
             let newUser = await Models.userModel.create({
                 name: payload.name,
                 userName: payload.userName,
@@ -47,53 +46,83 @@ module.exports = {
                 email: payload.email,
                 password: hashedPassword
             });
-            let user=await Models.userModel.findOne({
-                where:{
-                    id:newUser.id
-                },raw:true
+            let user = await Models.userModel.findOne({
+                where: {
+                    id: newUser.id
+                }, raw: true
             })
-            console.log("newUser",user);
+            console.log("newUser", user);
             return res.status(201).json({ msg: "User registered successfully", user: user });
-        } catch (error) {
-            console.error("Signup error:", error);
-            return res.status(500).json({ msg: "Internal server error", error: error.message });
-        }
-    },
-
-    otpVerify:async(req,res)=>{
-        try {
-            const schema = Joi.object({
-                phoneNumber: Joi.string().required(),
-                countrycode: Joi.string().required(),
-                otp: Joi.string().required(),
-            });
-            let payload = await helper.validationJoi(req.body, schema);
-            if (!payload) {
-                return res.status(400).json({ message: "Invalid request data" });
-            }
-            let user=await Models.userModel.findOne({
-                where:{
-                    countrycode:payload.countrycode,
-                    phoneNumber:payload.phoneNumber
-                },raw:true
-            })
-            if(payload.otp!=1111){
-             return res.status(400).json({ message: "Invalid otp" });
-            }else{
-                const token = jwt.sign(
-                    { id: user.id },
-                    secretKey,
-                    { expiresIn: "1h" }
-                );
-            user.token=token 
-            return res.status(201).json({ msg: "User registered successfully", user: user });
-            }
-
         } catch (error) {
             throw error
         }
     },
-    
+
+    sendOtp: async (req, res) => {
+        try {
+            const { phoneNumber, countryCode } = req.body;
+            const fullNumber = `+${countryCode}${phoneNumber}`;
+            const otp = Math.floor(100000 + Math.random() * 900000);
+            await Models.userModel.update({ otp }, { where: { phoneNumber } });
+            await client.messages.create({
+                body: `Your OTP is ${otp}`,
+                from: "YOUR_TWILIO_PHONE_NUMBER",
+                to: fullNumber,
+            });
+            res.json({ success: true, message: "OTP sent successfully!" });
+        } catch (error) {
+            throw error
+        }
+    },
+
+    otpVerify: async (req, res) => {
+        try {
+            const { phoneNumber, countryCode, otp } = req.body;
+            const user = await Models.userModel.findOne({ where: { phoneNumber } });
+            if (!user || user.otp !== otp) {
+                return res.status(400).json({ message: "Invalid OTP" });
+            }
+            const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" });
+            res.status(201).json({ msg: "User verified successfully", token });
+        } catch (error) {
+            throw error
+        }
+    },
+
+    // otpVerify: async (req, res) => {
+    //     try {
+    //         const schema = Joi.object({
+    //             phoneNumber: Joi.string().required(),
+    //             countrycode: Joi.string().required(),
+    //             otp: Joi.string().required(),
+    //         });
+    //         let payload = await helper.validationJoi(req.body, schema);
+    //         if (!payload) {
+    //             return res.status(400).json({ message: "Invalid request data" });
+    //         }
+    //         let user = await Models.userModel.findOne({
+    //             where: {
+    //                 countrycode: payload.countrycode,
+    //                 phoneNumber: payload.phoneNumber
+    //             }, raw: true
+    //         })
+    //         if (payload.otp != 1111) {
+    //             return res.status(400).json({ message: "Invalid otp" });
+    //         } else {
+    //             const token = jwt.sign(
+    //                 { id: user.id },
+    //                 secretKey,
+    //                 { expiresIn: "1h" }
+    //             );
+    //             user.token = token
+    //             return res.status(201).json({ msg: "User registered successfully", user: user });
+    //         }
+
+    //     } catch (error) {
+    //         throw error
+    //     }
+    // },
+
     login: async (req, res) => {
         try {
             const schema = Joi.object({
@@ -127,14 +156,12 @@ module.exports = {
                 user: { ...user.toJSON(), token }
             });
         } catch (error) {
-            console.error("Login Error:", error);
-            return res.status(500).json({ message: "Internal server error" });
+            throw error
         }
     },
 
     logout: async (req, res) => {
         try {
-            console.log(req.body, "hiiiiiiii")
             const schema = Joi.object().keys({
                 deviceToken: Joi.string().required().allow(""),
             });
