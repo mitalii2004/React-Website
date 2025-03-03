@@ -4,7 +4,6 @@ const controllers = require('../controllers/index')
 const verifyToken = require('../middleware/verifyToken').verifyToken;
 
 router.post('/signUp', controllers.userController.signUp)
-router.post('/sendOtp', controllers.userController.sendOtp)
 router.post('/otpVerify', controllers.userController.otpVerify)
 router.post('/login', controllers.userController.login)
 router.post('/logout', verifyToken, controllers.userController.logout)

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
-import "/Style.css";
+import "react-phone-input-2/lib/style.css";
 
 const SignUp = () => {
   const [showEmailForm, setShowEmailForm] = useState(false);
@@ -66,11 +66,18 @@ const SignUp = () => {
     if (!validateForm()) return;
 
     try {
+      let countryCode = phoneNumber.startsWith("+")
+        ? phoneNumber.slice(1, 3)
+        : "";
+      let purePhoneNumber = phoneNumber.startsWith("+")
+        ? phoneNumber.slice(3)
+        : phoneNumber;
+
       const response = await axios.post("http://localhost:3000/users/signUp", {
         name,
         userName,
         email,
-        phoneNumber,
+        phoneNumber: purePhoneNumber,
         password,
       });
 
@@ -80,7 +87,8 @@ const SignUp = () => {
         "phoneNumber",
         JSON.stringify(response.data.user.phoneNumber)
       );
-      toast.success("OTP Successful!");
+      toast.success("OTP Sent Successfully!");
+
       setTimeout(() => {
         navigate("/otpVerify");
       }, 1500);
@@ -91,7 +99,6 @@ const SignUp = () => {
       toast.error("Sign Up Failed!");
     }
   };
-
   return (
     <div className="container-fluid vh-100 d-flex">
       <ToastContainer />

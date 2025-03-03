@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; 
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "/Style.css";
 
 const OTPVerification = () => {
@@ -22,15 +23,19 @@ const OTPVerification = () => {
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
+
   const handleChange = (index, e) => {
     const value = e.target.value.replace(/\D/g, "");
-
     if (value) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
+      if (index < 3) {
+        inputRefs.current[index + 1].focus();
+      }
     }
   };
+
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace") {
       e.preventDefault();
@@ -44,8 +49,11 @@ const OTPVerification = () => {
       setOtp(newOtp);
     }
   };
+
   const handleSubmit = async () => {
-    const phoneNumber = localStorage.getItem("phoneNumber");
+    // const phoneNumber = localStorage.getItem("phoneNumber");
+    const phoneNumber = JSON.parse(localStorage.getItem("phoneNumber"));
+
     if (!phoneNumber) {
       toast.error("Phone number not found!");
       return;
@@ -56,7 +64,7 @@ const OTPVerification = () => {
       return;
     }
     try {
-      const response = await fetch("http://localhost:3000/users/otpverify", {
+      const response = await fetch("http://localhost:3000/users/otpVerify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ otp: otpCode, phoneNumber }),
@@ -64,10 +72,9 @@ const OTPVerification = () => {
       const data = await response.json();
       if (response.ok) {
         toast.success("OTP Verified Successfully!");
-        
         setTimeout(() => {
           navigate("/");
-        }, 2000); 
+        }, 2000);
       } else {
         toast.error(data.message || "OTP verification failed.");
       }
@@ -76,6 +83,7 @@ const OTPVerification = () => {
       console.error(error);
     }
   };
+
   const handleResend = () => {
     setResendTimer(30);
     setIsResendDisabled(true);
