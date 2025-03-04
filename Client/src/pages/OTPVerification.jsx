@@ -5,10 +5,10 @@ import "react-toastify/dist/ReactToastify.css";
 import "/Style.css";
 
 const OTPVerification = () => {
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [resendTimer, setResendTimer] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
-  const inputRefs = useRef([...Array(4)].map(() => null));
+  const inputRefs = useRef([...Array(6)].map(() => null));
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +23,7 @@ const OTPVerification = () => {
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
+
   const handleSubmit = useCallback(async () => {
     const phoneNumber = JSON.parse(localStorage.getItem("phoneNumber"));
 
@@ -32,12 +33,14 @@ const OTPVerification = () => {
     }
 
     const otpCode = otp.join("");
-    if (otpCode.length !== 4) {
-      toast.warning("Please enter a 4-digit OTP.");
+    if (otpCode.length !== 6) {
+      toast.warning("Please enter a 6-digit OTP.");
       return;
     }
 
     try {
+      console.log("Sending OTP:", otpCode, "Phone Number:", phoneNumber); // Debugging
+
       const response = await fetch("http://localhost:3000/users/otpVerify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -49,7 +52,6 @@ const OTPVerification = () => {
       if (response.ok) {
         toast.success("OTP Verified Successfully!");
         localStorage.setItem("user", JSON.stringify(data.user));
-
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -63,7 +65,7 @@ const OTPVerification = () => {
   }, [otp, navigate]);
 
   useEffect(() => {
-    if (otp.join("").length === 4) {
+    if (otp.join("").length === 6) {
       setTimeout(handleSubmit, 300);
     }
   }, [otp, handleSubmit]);
@@ -74,7 +76,7 @@ const OTPVerification = () => {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
-      if (index < 3) {
+      if (index < 5) {
         inputRefs.current[index + 1].focus();
       }
     }
@@ -105,7 +107,8 @@ const OTPVerification = () => {
       <ToastContainer position="top-center" autoClose={2000} />
       <div className="otp-box">
         <h4>Enter OTP</h4>
-        <p>Enter the 4-digit code sent to your phone.</p>
+        <br />
+        <p>Enter the 6-digit code sent to your phone.</p>
         <div className="otp-inputs">
           {otp.map((digit, index) => (
             <input
@@ -120,7 +123,6 @@ const OTPVerification = () => {
             />
           ))}
         </div>
-        {/* Removed Verify OTP button */}
         <p>
           <button
             className="resend-btn"

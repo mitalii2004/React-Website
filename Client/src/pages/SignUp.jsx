@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "/Style.css";
 import { ToastContainer, toast } from "react-toastify";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import icons
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
@@ -61,46 +61,6 @@ const SignUp = () => {
       return newErrors;
     });
   };
-
-  // const handleSignUp = async (e) => {
-  //   e.preventDefault();
-  //   setSubmitted(true);
-
-  //   if (!validateForm()) return;
-
-  //   try {
-  //     let countryCode = phoneNumber.startsWith("+")
-  //       ? phoneNumber.slice(1, 3)
-  //       : "";
-  //     let purePhoneNumber = phoneNumber.startsWith("+")
-  //       ? phoneNumber.slice(3)
-  //       : phoneNumber;
-  //     console.log("countryCode", countryCode);
-  //     const response = await axios.post("http://localhost:3000/users/signUp", {
-  //       name,
-  //       userName,
-  //       email,
-  //       phoneNumber: purePhoneNumber,
-  //       password,
-  //     });
-
-  //     console.log("Signup successful:", response);
-  //     localStorage.setItem(
-  //       "phoneNumber",
-  //       JSON.stringify(response.data.user.phoneNumber)
-  //     );
-  //     toast.success("OTP Sent Successfully!...");
-
-  //     setTimeout(() => {
-  //       navigate("/otpVerify");
-  //     }, 1500);
-  //   } catch (error) {
-  //     setError(
-  //       error.response?.data?.message || "Signup failed. Please try again."
-  //     );
-  //     toast.error("Sign Up Failed!");
-  //   }
-  // };
 
   const handleSignUp = async (e) => {
     e.preventDefault();

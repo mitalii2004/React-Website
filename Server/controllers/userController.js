@@ -65,25 +65,26 @@ module.exports = {
     otpVerify: async (req, res) => {
         try {
             const schema = Joi.object({
-                phoneNumber: Joi.string().required(),
-                otp: Joi.string().required(),
+                phoneNumber: Joi.string().trim().required(),
+                otp: Joi.string().trim().length(6).required(),
             });
-            let payload = await helper.validationJoi(req.body, schema);
-            if (!payload) {
-                return res.status(400).json({ message: "Invalid request data" });
+            const payload = await schema.validateAsync(req.body);
+            let { phoneNumber, otp } = payload;
+            if (!phoneNumber.startsWith("+")) {
+                phoneNumber = `+91 ${phoneNumber}`;
             }
-            let phoneNumber = payload.phoneNumber;
-            let countryCode = "";
-            if (phoneNumber.startsWith("+")) {
-                let splitArray = phoneNumber.slice(1).split("");
-                countryCode = splitArray.splice(0, 2).join("");
-                phoneNumber = splitArray.join("");
-                if (countryCode === "91") {
-                    countryCode = "";
-                }
+            console.log("Verifying OTP for phone number:", phoneNumber);
+            console.log("Using Twilio Service SID:", process.env.TWILIO_SERVICE_SID);
+            const verificationCheck = await client.verify.v2.services(process.env.TWILIO_SERVICE_SID)
+                .verificationChecks
+                .create({ to: phoneNumber, code: otp });
+
+            console.log("Twilio Response:", verificationCheck);
+            if (verificationCheck.status !== "approved") {
+                return res.status(400).json({ message: "Invalid OTP. Please try again." });
             }
             let user = await Models.userModel.findOne({
-                where: { phoneNumber: phoneNumber },
+                where: { phoneNumber: phoneNumber.replace("+91", "") },
                 raw: true
             });
             if (!user) {
@@ -91,9 +92,13 @@ module.exports = {
             }
             const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" });
             user.token = token
-            return res.status(200).json({ msg: "OTP verified successfully", user });
+            return res.status(200).json({ message: "OTP verified successfully", user });
         } catch (error) {
-            throw error;
+            console.error("Error in OTP verification:", error);
+            if (error.status === 404) {
+                return res.status(500).json({ message: "Twilio Service SID is incorrect or missing." });
+            }
+            return res.status(500).json({ message: "Internal Server Error", error: error.message });
         }
     },
 
