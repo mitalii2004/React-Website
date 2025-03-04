@@ -21,3 +21,4 @@ module.exports = {
     sequelize: sequelize,
     connectionDB: connectionDB,
 };
+ 

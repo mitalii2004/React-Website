@@ -19,26 +19,28 @@ const client = new twilio(
 
 module.exports = {
 
-    signUp: async (req, res) => {
+  
+    
+     signUp : async (req, res) => {
         try {
             const schema = Joi.object({
                 name: Joi.string().required(),
                 userName: Joi.string().required(),
                 phoneNumber: Joi.string().required(),
-                email: Joi.string().required(),
+                email: Joi.string().email().required(),
                 password: Joi.string().min(6).required(),
                 deviceToken: Joi.string().optional()
             });
-
-            let payload = await helper.validationJoi(req.body, schema);
-            if (!payload) {
-                return res.status(400).json({ message: "Invalid request data" });
-            }
+    
+            let payload = await schema.validateAsync(req.body);
+    
+            // Check if user already exists
             let userExist = await Models.userModel.findOne({ where: { email: payload.email } });
             if (userExist) {
-                return res.status(400).json({ msg: "User already exists with the same email" });
+                return res.status(400).json({ msg: "User already exists with this email" });
             }
-            let phoneNumber = payload.phoneNumber;
+    
+            let phoneNumber = payload.phoneNumber.trim();
             let countryCode = "";
             if (phoneNumber.startsWith("+")) {
                 let splitArray = phoneNumber.slice(1).split("");
@@ -49,58 +51,85 @@ module.exports = {
                 }
             }
             const formattedPhone = `+${countryCode}${phoneNumber}`;
+    
+            // Hash password
+            const hashedPassword = await bcrypt.hash(payload.password, 10);
+    
+            // Store user in DB before OTP verification
+            const newUser = await Models.userModel.create({
+                name: payload.name,
+                userName: payload.userName,
+                phoneNumber: formattedPhone,
+                email: payload.email,
+                password: hashedPassword,
+                deviceToken: payload.deviceToken || null,
+                isVerified: false, // Set isVerified false until OTP verification
+            });
+    
+            // Send OTP using Twilio
             await client.verify.v2.services(process.env.TWILIO_SERVICE_SID)
                 .verifications
                 .create({ to: formattedPhone, channel: "sms" });
-
+    
             return res.status(200).json({
                 msg: "OTP sent successfully. Please verify your OTP to complete registration.",
                 phoneNumber: formattedPhone
             });
         } catch (error) {
-            throw error
+            console.error("Signup Error:", error);
+            return res.status(500).json({ message: "Internal server error" });
         }
     },
-
-    otpVerify: async (req, res) => {
+     otpVerify : async (req, res) => {
         try {
             const schema = Joi.object({
                 phoneNumber: Joi.string().trim().required(),
                 otp: Joi.string().trim().length(6).required(),
             });
+    
             const payload = await schema.validateAsync(req.body);
             let { phoneNumber, otp } = payload;
+    
+            // Ensure correct phone number format
             if (!phoneNumber.startsWith("+")) {
-                phoneNumber = `+91 ${phoneNumber}`;
+                phoneNumber = `+91${phoneNumber}`;
             }
+    
             console.log("Verifying OTP for phone number:", phoneNumber);
-            console.log("Using Twilio Service SID:", process.env.TWILIO_SERVICE_SID);
+    
+            // Verify OTP with Twilio
             const verificationCheck = await client.verify.v2.services(process.env.TWILIO_SERVICE_SID)
                 .verificationChecks
                 .create({ to: phoneNumber, code: otp });
-
+    
             console.log("Twilio Response:", verificationCheck);
+    
             if (verificationCheck.status !== "approved") {
                 return res.status(400).json({ message: "Invalid OTP. Please try again." });
             }
-            let user = await Models.userModel.findOne({
-                where: { phoneNumber: phoneNumber.replace("+91", "") },
-                raw: true
-            });
+    
+            // Find user and update isVerified status
+            let user = await Models.userModel.findOne({ where: { phoneNumber: phoneNumber } });
+    
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
+    
+            await Models.userModel.update(
+                { isVerified: true },
+                { where: { phoneNumber: phoneNumber } }
+            );
+    
+            // Generate JWT token
             const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" });
-            user.token = token
-            return res.status(200).json({ message: "OTP verified successfully", user });
+    
+            return res.status(200).json({ message: "OTP verified successfully", token, user });
         } catch (error) {
-            console.error("Error in OTP verification:", error);
-            if (error.status === 404) {
-                return res.status(500).json({ message: "Twilio Service SID is incorrect or missing." });
-            }
-            return res.status(500).json({ message: "Internal Server Error", error: error.message });
+            console.error("OTP Verification Error:", error);
+            return res.status(500).json({ message: "Internal server error" });
         }
     },
+    
 
     login: async (req, res) => {
         try {
