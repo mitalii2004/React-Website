@@ -62,6 +62,46 @@ const SignUp = () => {
     });
   };
 
+  // const handleSignUp = async (e) => {
+  //   e.preventDefault();
+  //   setSubmitted(true);
+
+  //   if (!validateForm()) return;
+
+  //   try {
+  //     let countryCode = phoneNumber.startsWith("+")
+  //       ? phoneNumber.slice(1, 3)
+  //       : "";
+  //     let purePhoneNumber = phoneNumber.startsWith("+")
+  //       ? phoneNumber.slice(3)
+  //       : phoneNumber;
+  //     console.log("countryCode", countryCode);
+  //     const response = await axios.post("http://localhost:3000/users/signUp", {
+  //       name,
+  //       userName,
+  //       email,
+  //       phoneNumber: purePhoneNumber,
+  //       password,
+  //     });
+
+  //     console.log("Signup successful:", response);
+  //     localStorage.setItem(
+  //       "phoneNumber",
+  //       JSON.stringify(response.data.user.phoneNumber)
+  //     );
+  //     toast.success("OTP Sent Successfully!...");
+
+  //     setTimeout(() => {
+  //       navigate("/otpVerify");
+  //     }, 1500);
+  //   } catch (error) {
+  //     setError(
+  //       error.response?.data?.message || "Signup failed. Please try again."
+  //     );
+  //     toast.error("Sign Up Failed!");
+  //   }
+  // };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     setSubmitted(true);
@@ -75,7 +115,7 @@ const SignUp = () => {
       let purePhoneNumber = phoneNumber.startsWith("+")
         ? phoneNumber.slice(3)
         : phoneNumber;
-      console.log("countryCode", countryCode);
+      console.log(countryCode);
       const response = await axios.post("http://localhost:3000/users/signUp", {
         name,
         userName,
@@ -84,20 +124,18 @@ const SignUp = () => {
         password,
       });
 
-      console.log("Signup successful:", response);
+      console.log("OTP Sent:", response);
       localStorage.setItem(
         "phoneNumber",
-        JSON.stringify(response.data.user.phoneNumber)
+        JSON.stringify(response.data.phoneNumber)
       );
-      toast.success("OTP Sent Successfully!...");
+      toast.success("OTP Sent Successfully!");
 
       setTimeout(() => {
         navigate("/otpVerify");
       }, 1500);
     } catch (error) {
-      setError(
-        error.response?.data?.message || "Signup failed. Please try again."
-      );
+      setError(error.response?.data?.msg || "Signup failed. Please try again.");
       toast.error("Sign Up Failed!");
     }
   };

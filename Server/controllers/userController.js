@@ -11,12 +11,11 @@ const commonHelper = require("../helpers/commonHelper");
 const crypto = require("crypto");
 const Response = require("../helpers/response");
 
-const otpManager = require('node-twillo-otp-manager')
-    (
-        process.env.TWILIO_ACCOUNT_SID,
-        process.env.TWILIO_AUTH_TOKEN,
-        process.env.TWILIO_SERVICE_SID
-    );
+const twilio = require("twilio");
+const client = new twilio(
+    process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+);
 
 module.exports = {
 
@@ -30,6 +29,7 @@ module.exports = {
                 password: Joi.string().min(6).required(),
                 deviceToken: Joi.string().optional()
             });
+
             let payload = await helper.validationJoi(req.body, schema);
             if (!payload) {
                 return res.status(400).json({ message: "Invalid request data" });
@@ -48,22 +48,17 @@ module.exports = {
                     countryCode = "";
                 }
             }
-            const hashedPassword = await bcrypt.hash(payload.password, 10);
-            let newUser = await Models.userModel.create({
-                name: payload.name,
-                userName: payload.userName,
-                countryCode: countryCode,
-                phoneNumber: phoneNumber,
-                email: payload.email,
-                password: hashedPassword
+            const formattedPhone = `+${countryCode}${phoneNumber}`;
+            await client.verify.v2.services(process.env.TWILIO_SERVICE_SID)
+                .verifications
+                .create({ to: formattedPhone, channel: "sms" });
+
+            return res.status(200).json({
+                msg: "OTP sent successfully. Please verify your OTP to complete registration.",
+                phoneNumber: formattedPhone
             });
-            let user = await Models.userModel.findOne({
-                where: { id: newUser.id },
-                raw: true
-            });
-            return res.status(201).json({ msg: "User registered successfully. OTP sent.", user });
         } catch (error) {
-            throw error;
+            throw error
         }
     },
 
@@ -95,7 +90,7 @@ module.exports = {
                 return res.status(404).json({ message: "User not found" });
             }
             const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" });
-            user.token=token
+            user.token = token
             return res.status(200).json({ msg: "OTP verified successfully", user });
         } catch (error) {
             throw error;
