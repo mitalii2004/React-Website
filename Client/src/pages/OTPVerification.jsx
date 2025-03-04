@@ -39,7 +39,7 @@ const OTPVerification = () => {
     }
 
     try {
-      console.log("Sending OTP:", otpCode, "Phone Number:", phoneNumber); // Debugging
+      console.log("Sending OTP:", otpCode, "Phone Number:", phoneNumber);
 
       const response = await fetch("http://localhost:3000/users/otpVerify", {
         method: "POST",
@@ -51,11 +51,22 @@ const OTPVerification = () => {
 
       if (response.ok) {
         toast.success("OTP Verified Successfully!");
+
+        // Store user & token in localStorage
         localStorage.setItem("user", JSON.stringify(data.user));
+        if (data.user?.token) {
+          console.log("Token received:", data.user.token);
+
+          localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("token", data.user.token);
+                }
+
         setTimeout(() => {
           navigate("/");
         }, 2000);
       } else {
+        console.log("No token received.");
+
         toast.error(data.message || "OTP verification failed.");
       }
     } catch (error) {

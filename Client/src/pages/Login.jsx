@@ -232,27 +232,7 @@ const Login = () => {
                     <p className="text-danger small">{errors.userDetail}</p>
                   )}
                 </div>
-                {/* <div className="mb-3">
-                  <label className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className="form-control custom-input"
-                    value={password}
-                    onChange={(e) => handleInputChange(e, "password")}
-                  />
-                  {submitted && errors.password && (
-                    <p className="text-danger small">{errors.password}</p>
-                  )}
-                  <div className="text-end">
-                    <button
-                      type="button"
-                      className="btn btn-link small text-black"
-                      onClick={() => setIsForgotPassword(true)}
-                    >
-                      Forgot?
-                    </button>
-                  </div>
-                </div> */}
+                
                 <div className="mb-3">
                   <label className="form-label">Password</label>
                   <div className="position-relative">
