@@ -78,13 +78,12 @@ const Login = () => {
     if (field === "email") {
       setEmail(value);
 
-      // Show error until a complete valid email is entered
       if (!value.trim()) {
         newErrors.email = "Email is required";
       } else if (!isValidEmail(value)) {
         newErrors.email = "Invalid email format";
       } else {
-        delete newErrors.email; // Remove error only when full email is correct
+        delete newErrors.email;
       }
     }
 
