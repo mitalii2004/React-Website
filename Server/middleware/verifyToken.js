@@ -5,10 +5,13 @@ const Models = require("../models/index")
 module.exports = {
 
     verifyToken: async (req, res, next) => {
-        const token = req.headers["authorization"];
+        const token = req.headers["authorization"];        
         if (token && token.startsWith("Bearer ")) {
+            
             const actualToken = token.split(" ")[1];
-            jwt.verify(actualToken, secretKey, async (err, authData) => {
+            console.log("actualToken",actualToken);
+
+            jwt.verify(actualToken, secretKey, async (err, authData) => {    
                 if (err) {
                     return res.status(403).json({ message: "Invalid token!" });
                 }
@@ -17,6 +20,7 @@ module.exports = {
                         id: authData.id
                     }, raw: true
                 })
+                
                 req.user = userDetail;
                 next();
             });

@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "/Style.css";
 
 const Login = () => {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [userDetail, setUserDetail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState({});
@@ -19,7 +21,7 @@ const Login = () => {
 
   const validateForm = () => {
     let newErrors = {};
-  
+
     if (!userDetail.trim()) {
       newErrors.userDetail = "Username or Email is required";
     } else if (userDetail.includes("@")) {
@@ -29,24 +31,24 @@ const Login = () => {
     } else if (!isValidUsername(userDetail)) {
       newErrors.userDetail = "Enter a valid username (no spaces)";
     }
-  
+
     if (!password.trim()) {
       newErrors.password = "Password is required";
     } else if (password.length < 6) {
       newErrors.password = "Incorrect Password";
     }
-  
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
   const handleInputChange = (e, field) => {
     const { value } = e.target;
     let newErrors = { ...errors };
-  
+
     if (field === "userDetail") {
       setUserDetail(value);
-  
+
       if (!value.trim()) {
         newErrors.userDetail = "Username or Email is required";
       } else if (value.includes("@")) {
@@ -61,7 +63,7 @@ const Login = () => {
         delete newErrors.userDetail;
       }
     }
-  
+
     if (field === "password") {
       setPassword(value);
       if (!value.trim()) {
@@ -72,10 +74,10 @@ const Login = () => {
         delete newErrors.password;
       }
     }
-  
+
     if (field === "email") {
       setEmail(value);
-  
+
       // Show error until a complete valid email is entered
       if (!value.trim()) {
         newErrors.email = "Email is required";
@@ -85,10 +87,10 @@ const Login = () => {
         delete newErrors.email; // Remove error only when full email is correct
       }
     }
-  
+
     setErrors(newErrors);
   };
-  
+
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     setSubmitted(true);
@@ -189,7 +191,10 @@ const Login = () => {
                     <p className="text-danger small">{errors.email}</p>
                   )}
                 </div>
-                <button type="submit" className="btn btn-dark w-100 custom-input">
+                <button
+                  type="submit"
+                  className="btn btn-dark w-100 custom-input"
+                >
                   Send Reset Instructions
                 </button>
               </form>
@@ -227,7 +232,7 @@ const Login = () => {
                     <p className="text-danger small">{errors.userDetail}</p>
                   )}
                 </div>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label className="form-label">Password</label>
                   <input
                     type="password"
@@ -247,13 +252,49 @@ const Login = () => {
                       Forgot?
                     </button>
                   </div>
+                </div> */}
+                <div className="mb-3">
+                  <label className="form-label">Password</label>
+                  <div className="position-relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className="form-control custom-input password-input"
+                      value={password}
+                      onChange={(e) => handleInputChange(e, "password")}
+                    />
+                    <span
+                      className="password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  </div>
+                  {submitted && errors.password && (
+                    <p className="text-danger small">{errors.password}</p>
+                  )}
+                  <div className="text-end">
+                    <button
+                      type="button"
+                      className="btn btn-link small text-black"
+                      onClick={() => setIsForgotPassword(true)}
+                    >
+                      Forgot?
+                    </button>
+                  </div>
                 </div>
-                <button type="submit" className="btn btn-dark w-100 custom-input">
+
+                <button
+                  type="submit"
+                  className="btn btn-dark w-100 custom-input"
+                >
                   Sign In
                 </button>
               </form>
               <p className="mt-3 text-center">
-                Don’t have an account? <Link to="/SignUp"><u>Sign up</u></Link>
+                Don’t have an account?{" "}
+                <Link to="/SignUp">
+                  <u>Sign up</u>
+                </Link>
               </p>
             </div>
           )}

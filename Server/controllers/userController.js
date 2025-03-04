@@ -94,8 +94,9 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            const token = jwt.sign({ id: user.id }, "process.env.JWT_SECRET", { expiresIn: "1h" });
-            return res.status(200).json({ msg: "OTP verified successfully", token, user });
+            const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" });
+            user.token=token
+            return res.status(200).json({ msg: "OTP verified successfully", user });
         } catch (error) {
             throw error;
         }

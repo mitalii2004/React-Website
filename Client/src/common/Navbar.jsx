@@ -23,6 +23,8 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     const token = localStorage.getItem("user");
+    console.log("token",JSON.parse(token).token);
+    
     if (!token) {
       Swal.fire({
         icon: "error",

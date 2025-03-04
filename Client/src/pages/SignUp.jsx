@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "/Style.css";
 import { ToastContainer, toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import icons
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
@@ -11,6 +13,7 @@ const SignUp = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [error, setError] = useState(null);
@@ -72,7 +75,7 @@ const SignUp = () => {
       let purePhoneNumber = phoneNumber.startsWith("+")
         ? phoneNumber.slice(3)
         : phoneNumber;
-
+      console.log("countryCode", countryCode);
       const response = await axios.post("http://localhost:3000/users/signUp", {
         name,
         userName,
@@ -98,6 +101,7 @@ const SignUp = () => {
       toast.error("Sign Up Failed!");
     }
   };
+
   return (
     <div className="container-fluid vh-100 d-flex">
       <ToastContainer />
@@ -234,12 +238,26 @@ const SignUp = () => {
 
                 <div className="mb-3">
                   <label className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className="form-control custom-input"
-                    value={password}
-                    onChange={(e) => handleInputChange(e, "password")}
-                  />
+                  <div className="position-relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className="form-control custom-input password-input"
+                      value={password}
+                      onChange={(e) => handleInputChange(e, "password")}
+                    />
+                    <FaEye
+                      className={`password-toggle ${
+                        showPassword ? "d-none" : ""
+                      }`}
+                      onClick={() => setShowPassword(true)}
+                    />
+                    <FaEyeSlash
+                      className={`password-toggle ${
+                        showPassword ? "" : "d-none"
+                      }`}
+                      onClick={() => setShowPassword(false)}
+                    />
+                  </div>
                   {submitted && errors.password && (
                     <p className="text-danger small">{errors.password}</p>
                   )}
@@ -281,6 +299,12 @@ const SignUp = () => {
                 </button>
                 <otpVerify />
               </form>
+              <p className="mt-3 text-center">
+                Already have an account?{" "}
+                <Link to="/Login">
+                  <u>Log In</u>
+                </Link>
+              </p>
             </>
           )}
         </div>

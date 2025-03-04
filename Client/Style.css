@@ -110,6 +110,20 @@ a {
 .react-tel-input .flag-dropdown {
   display: block !important;
 }
+.position-relative {
+  position: relative;
+}
+.password-input {
+  padding-right: 40px; 
+}
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+}
 
 /*OTP css*/
 .otp-container {
