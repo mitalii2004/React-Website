@@ -7,6 +7,7 @@ import axios from "axios";
 const cardsData = constants;
 
 const Card = () => {
+  
   const [likedItems, setLikedItems] = useState({});
   const [likeCounts, setLikeCounts] = useState(
     Object.fromEntries(cardsData.map(({ id, likes }) => [id, likes]))

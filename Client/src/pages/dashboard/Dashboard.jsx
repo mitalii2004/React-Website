@@ -19,7 +19,6 @@ const categories = [
   { name: "Product Design", image: "/12th.webp" },
 ];
 
-// Duplicate items for infinite scrolling
 const getInfiniteItems = (arr) => [...arr, ...arr];
 
 const Dashboard = () => {
@@ -46,6 +45,7 @@ const Dashboard = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [pause, manualControl]);
+  
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };

@@ -26,6 +26,8 @@ const OTPVerification = () => {
 
   const handleSubmit = useCallback(async () => {
     const phoneNumber = JSON.parse(localStorage.getItem("phoneNumber"));
+    const countryCode = JSON.parse(localStorage.getItem("countryCode"));
+
 
     if (!phoneNumber) {
       toast.error("Phone number not found!");
@@ -44,7 +46,7 @@ const OTPVerification = () => {
       const response = await fetch("http://localhost:3000/users/otpVerify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ otp: otpCode, phoneNumber }),
+        body: JSON.stringify({ otp: otpCode, phoneNumber ,countryCode}),
       });
 
       const data = await response.json();

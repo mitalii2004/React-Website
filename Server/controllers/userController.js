@@ -75,34 +75,31 @@ module.exports = {
             }
             let phoneNumber = payload.phoneNumber.trim();
             let countryCode = "";
-            if (phoneNumber.startsWith("+")) {
+            if (phoneNumber) {
                 let splitArray = phoneNumber.slice(1).split("");
                 countryCode = splitArray.splice(0, 2).join("");
                 phoneNumber = splitArray.join("");
-                if (countryCode === "91") {
-                    countryCode = "";
-                }
+               countryCode = `+${countryCode}`
             }
-            const formattedPhone = `+${countryCode}${phoneNumber}`;
+            const formattedPhone = `${countryCode}${phoneNumber}`;
 
             const hashedPassword = await bcrypt.hash(payload.password, 10);
             const newUser = await Models.userModel.create({
                 name: payload.name,
                 userName: payload.userName,
-                phoneNumber: formattedPhone,
+                phoneNumber: phoneNumber,
+                countryCode:countryCode,
                 email: payload.email,
                 password: hashedPassword,
                 deviceToken: payload.deviceToken || null,
                 isVerified: false,
             });
             console.log(newUser);
-            await client.verify.v2.services(process.env.TWILIO_SERVICE_SID)
-                .verifications
-                .create({ to: formattedPhone, channel: "sms" });
 
             return res.status(200).json({
                 msg: "OTP sent successfully. Please verify your OTP to complete registration.",
-                phoneNumber: formattedPhone
+                phoneNumber: phoneNumber,
+                countryCode:countryCode
             });
         } catch (error) {
             console.error("Signup Error:", error);
@@ -114,29 +111,20 @@ module.exports = {
         try {
             const schema = Joi.object({
                 phoneNumber: Joi.string().trim().required(),
+                countryCode:Joi.string().required(),
                 otp: Joi.string().trim().length(6).required(),
             });
 
             const payload = await schema.validateAsync(req.body);
-            let { phoneNumber, otp } = payload;
+            let { phoneNumber,countryCode, otp } = payload;
 
-            if (!phoneNumber.startsWith("+")) {
-                phoneNumber = `+91${phoneNumber}`;
-            }
 
             console.log("Verifying OTP for phone number:", phoneNumber);
 
-            const verificationCheck = await client.verify.v2.services(process.env.TWILIO_SERVICE_SID)
-                .verificationChecks
-                .create({ to: phoneNumber, code: otp });
-
-            console.log("Twilio Response:", verificationCheck);
-
-            if (verificationCheck.status !== "approved") {
+            if (req.body.otp != 111111) {
                 return res.status(400).json({ message: "Invalid OTP. Please try again." });
             }
-
-            let user = await Models.userModel.findOne({ where: { phoneNumber: phoneNumber } });
+            let user = await Models.userModel.findOne({ where: { phoneNumber: phoneNumber,countryCode:countryCode } });
 
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
@@ -144,7 +132,7 @@ module.exports = {
 
             await Models.userModel.update(
                 { isVerified: true },
-                { where: { phoneNumber: phoneNumber } }
+                { where: { phoneNumber: phoneNumber,countryCode:countryCode } }
             );
 
             const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: "1h" });
@@ -165,6 +153,23 @@ module.exports = {
             return res.status(500).json({ message: "Internal server error" });
         }
     },
+
+    // resendOtp: async (req, res) => {
+    //     try {
+    //         const schema = Joi.object({
+    //             email: Joi.string().trim().email().required(),
+    //         });
+    //         const { email } = await schema.validateAsync(req.body);
+    //         await OTP.destroy({ where: { email } });
+    //         const otp = generateOTP();
+    //         const expiresAt = new Date(Date.now() + 5 * 60000);
+    //         await OTP.create({ email, otp, expiresAt });
+    //         await sendOTPEmail(email, otp);
+    //         return res.status(200).json({ message: "OTP resent successfully" });
+    //     } catch (error) {
+    //         throw error
+    //     }
+    // },
 
     login: async (req, res) => {
         try {

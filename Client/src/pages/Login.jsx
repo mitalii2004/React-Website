@@ -17,6 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const isValidEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
+  
   const isValidUsername = (username) => /^[a-zA-Z0-9_]+$/.test(username);
 
   const validateForm = () => {

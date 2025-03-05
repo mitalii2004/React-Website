@@ -89,6 +89,10 @@ const SignUp = () => {
         "phoneNumber",
         JSON.stringify(response.data.phoneNumber)
       );
+      localStorage.setItem(
+        "countryCode",
+        JSON.stringify(response.data.countryCode)
+      );
       toast.success("OTP Sent Successfully!");
 
       setTimeout(() => {

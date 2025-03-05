@@ -76,6 +76,7 @@ const Navbar = () => {
   const handleMouseEnter = (dropdown) => {
     setOpenDropdown(dropdown);
   };
+  
   const handleMouseLeave = () => {
     setOpenDropdown(null);
   };
