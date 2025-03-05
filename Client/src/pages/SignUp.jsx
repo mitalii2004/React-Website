@@ -104,6 +104,15 @@ const SignUp = () => {
     }
   };
 
+  const handleGoogleSignUp = async () => {
+    try {
+      window.location.href = "http://localhost:3000/users/auth/google";
+    } catch (error) {
+      console.error("Google Sign-Up Failed:", error);
+      toast.error("Google Sign-Up Failed!");
+    }
+  };
+
   return (
     <div className="container-fluid vh-100 d-flex">
       <ToastContainer />
@@ -131,10 +140,12 @@ const SignUp = () => {
             <>
               <button
                 className="btn btn-dark w-100 mb-2 custom-input"
-                onClick={() => (window.location.href = "/auth/google")}
+                onClick={handleGoogleSignUp}
               >
-                <i className="fab fa-google me-2"></i> Sign up with Google
+                <i className="fab fa-google me-2 google-icon"></i> Sign up with
+                Google
               </button>
+
               <p className="text-center text-muted">or</p>
               <hr />
 
@@ -309,7 +320,10 @@ const SignUp = () => {
                   <u>Log In</u>
                 </Link>
               </p>
-              <label className="form-check-label small text-muted">This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.</label>
+              <label className="form-check-label small text-muted">
+                This site is protected by reCAPTCHA and the Google Privacy
+                Policy and Terms of Service apply.
+              </label>
             </>
           )}
         </div>

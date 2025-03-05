@@ -87,8 +87,8 @@ module.exports = {
             const newUser = await Models.userModel.create({
                 name: payload.name,
                 userName: payload.userName,
-                phoneNumber: phoneNumber,
                 countryCode:countryCode,
+                phoneNumber: phoneNumber,
                 email: payload.email,
                 password: hashedPassword,
                 deviceToken: payload.deviceToken || null,

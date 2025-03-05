@@ -151,6 +151,15 @@ const Login = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      window.location.href = "http://localhost:3000/users/auth/google";
+    } catch (error) {
+      console.error("Google Log In Failed:", error);
+      toast.error("Google Log In Failed!");
+    }
+  };
+  
   return (
     <div className="container-fluid vh-100 d-flex">
       <ToastContainer />
@@ -212,11 +221,10 @@ const Login = () => {
               <h2 className="mb-4 text-center">Sign in to Dribbble</h2>
               <button
                 className="btn btn-light w-100 mb-2 custom-input"
-                onClick={() => (window.location.href = "/auth/google")}
+                onClick={handleGoogleLogin}
               >
-                <i className="fab fa-google me-2"></i> Sign in with Google
+                <i className="fab fa-google me-2 google-icon"></i> Sign In with Google
               </button>
-
               <p className="text-center text-muted divider">
                 or sign in with email
               </p>

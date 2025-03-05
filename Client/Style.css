@@ -86,7 +86,15 @@ a {
 }
 
 /*Signup css*/
-h6{
+.google-icon {
+  background: linear-gradient( red, yellow, green, blue);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
+}
+h6 {
   font-size: 1;
 }
 .form-container {
