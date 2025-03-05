@@ -209,9 +209,13 @@ const Login = () => {
           ) : (
             <div>
               <h2 className="mb-4 text-center">Sign in to Dribbble</h2>
-              <button className="btn btn-light w-100 mb-3 border custom-input">
+              <button
+                className="btn btn-light w-100 mb-2 custom-input"
+                onClick={() => (window.location.href = "/auth/google")}
+              >
                 <i className="fab fa-google me-2"></i> Sign in with Google
               </button>
+
               <p className="text-center text-muted divider">
                 or sign in with email
               </p>
@@ -231,7 +235,7 @@ const Login = () => {
                     <p className="text-danger small">{errors.userDetail}</p>
                   )}
                 </div>
-                
+
                 <div className="mb-3">
                   <label className="form-label">Password</label>
                   <div className="position-relative">

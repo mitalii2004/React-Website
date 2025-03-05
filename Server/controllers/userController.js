@@ -11,13 +11,51 @@ const commonHelper = require("../helpers/commonHelper");
 const crypto = require("crypto");
 const Response = require("../helpers/response");
 
+const passport = require('passport')
+const googleStrategy = require('passport-google-oauth2').Strategy;
+
 const twilio = require("twilio");
 const client = new twilio(
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_AUTH_TOKEN
 );
 
+passport.use(
+    new googleStrategy({
+        clientID: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        callbackURL: process.env.CALLBACK_URL,
+        passReqToCallback: true
+    },
+        function (request, accessToken, refreshToken, profile, done) {
+            return done(null, profile);
+        }
+    ));
+
+passport.serializeUser((user, done) => {
+    done(null, user)
+})
+
+passport.deserializeUser(function (user, done) {
+    done(null, user)
+})
+
 module.exports = {
+
+    loadAuth: (req, res) => {
+        res.render('auth')
+    },
+
+    successGoogleLogin: (req, res) => {
+        if (!req.user)
+            res.redirect('/failure')
+        console.log(req.user)
+        res.send('Welcome ' + req.user.email)
+    },
+
+    failureGoogleLogin: (req, res) => {
+        res.send('Error')
+    },
 
     signUp: async (req, res) => {
         try {
@@ -57,7 +95,7 @@ module.exports = {
                 deviceToken: payload.deviceToken || null,
                 isVerified: false,
             });
-
+            console.log(newUser);
             await client.verify.v2.services(process.env.TWILIO_SERVICE_SID)
                 .verifications
                 .create({ to: formattedPhone, channel: "sms" });

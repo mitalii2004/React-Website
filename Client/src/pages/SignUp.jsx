@@ -125,10 +125,12 @@ const SignUp = () => {
 
           {!showEmailForm ? (
             <>
-              <button className="btn btn-dark w-100 mb-2 custom-input">
+              <button
+                className="btn btn-dark w-100 mb-2 custom-input"
+                onClick={() => (window.location.href = "/auth/google")}
+              >
                 <i className="fab fa-google me-2"></i> Sign up with Google
               </button>
-
               <p className="text-center text-muted">or</p>
               <hr />
 
