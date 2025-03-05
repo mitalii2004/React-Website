@@ -309,6 +309,7 @@ const SignUp = () => {
                   <u>Log In</u>
                 </Link>
               </p>
+              <label className="form-check-label small text-muted">This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.</label>
             </>
           )}
         </div>
