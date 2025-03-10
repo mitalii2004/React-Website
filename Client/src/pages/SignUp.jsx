@@ -8,6 +8,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
 const SignUp = () => {
+  
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [name, setName] = useState("");
   const [userName, setUserName] = useState("");
@@ -330,6 +331,7 @@ const SignUp = () => {
       </div>
     </div>
   );
+
 };
 
 export default SignUp;
